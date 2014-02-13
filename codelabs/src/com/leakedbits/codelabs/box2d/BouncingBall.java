@@ -154,9 +154,9 @@ public class BouncingBall implements Screen {
 
 		/* Shape definition */
 		ChainShape wallsShape = new ChainShape();
-		wallsShape.createChain(new Vector2[] { new Vector2(-7, -5),
+		wallsShape.createChain(new Vector2[] { new Vector2(-9, -5),
 				new Vector2(9, -5), new Vector2(9, 5), new Vector2(-9, 5),
-				new Vector2(-9, -3), new Vector2(-7, -5) });
+				new Vector2(-9, -3), new Vector2(-9, -5) });
 
 		/* Fixture definition */
 		FixtureDef fixtureDef = new FixtureDef();
