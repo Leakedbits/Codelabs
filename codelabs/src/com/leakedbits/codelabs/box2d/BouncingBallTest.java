@@ -1,7 +1,6 @@
 package com.leakedbits.codelabs.box2d;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
@@ -12,8 +11,9 @@ import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.leakedbits.codelabs.utils.Test;
 
-public class BouncingBall implements Screen {
+public class BouncingBallTest extends Test {
 
 	/* Use Box2DDebugRenderer, which is a model renderer for debug purposes */
 	private Box2DDebugRenderer debugRenderer;
@@ -24,6 +24,13 @@ public class BouncingBall implements Screen {
 	/* Define a world to hold all bodies and simulate reactions between them */
 	private World world;
 
+	/**
+	 * Main constructor used to update test name.
+	 */
+	public BouncingBallTest() {
+		name = "Bouncing ball";
+	}
+	
 	@Override
 	public void render(float delta) {
 		/* Clear screen with a black background */
@@ -65,6 +72,27 @@ public class BouncingBall implements Screen {
 		createBall();
 		createRamp();
 		createWalls();
+	}
+	
+	@Override
+	public void hide() {
+
+	}
+
+	@Override
+	public void pause() {
+
+	}
+
+	@Override
+	public void resume() {
+
+	}
+
+	@Override
+	public void dispose() {
+		debugRenderer.dispose();
+		world.dispose();
 	}
 
 	/**
@@ -168,27 +196,6 @@ public class BouncingBall implements Screen {
 		world.createBody(bodyDef).createFixture(fixtureDef);
 
 		wallsShape.dispose();
-	}
-
-	@Override
-	public void hide() {
-
-	}
-
-	@Override
-	public void pause() {
-
-	}
-
-	@Override
-	public void resume() {
-
-	}
-
-	@Override
-	public void dispose() {
-		debugRenderer.dispose();
-		world.dispose();
 	}
 
 }
