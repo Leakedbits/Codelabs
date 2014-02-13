@@ -1,0 +1,25 @@
+{
+	"com.badlogic.gdx.graphics.Color": {
+		"white": { "r": 1, "g": 1, "b": 1, "a": 1 },
+		"white": { "r": 0, "g": 0, "b": 0, "a": 1 }
+	},
+	"com.badlogic.gdx.graphics.g2d.BitmapFont": {
+		"white": { "file": "data/fonts/consolas_white.fnt" }
+	},	
+	"com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
+		"blue": {
+			"up": "btn_up_blue",
+			"down": "btn_down_blue",
+			"over": "btn_over_blue",
+			"font": white 
+		},
+		"red": {
+			"up": "btn_up_red",
+			"down": "btn_down_red",
+			"over": "btn_over_red",
+			"font": white 
+		}
+	}
+	
+	
+}
