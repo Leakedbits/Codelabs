@@ -85,6 +85,13 @@ public class ImpulsesTest extends Test {
 		camera = new OrthographicCamera(20,
 				20 * (Gdx.graphics.getHeight() / (float) Gdx.graphics
 						.getWidth()));
+		
+		/*
+		 * Next line must remain commented because we do this in its parent (See
+		 * Test class). In case you are not using Test class, uncomment this
+		 * line to set input processor to handle events.
+		 */
+		//Gdx.input.setInputProcessor(this);
 
 		/* Create all bodies */
 		box = createBox();
@@ -188,7 +195,7 @@ public class ImpulsesTest extends Test {
 	 */
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		super.touchUp(screenX, screenY, pointer, button);
+		super.touchDown(screenX, screenY, pointer, button);
 
 		this.timer = System.currentTimeMillis();
 

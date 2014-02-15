@@ -1,7 +1,6 @@
 package com.leakedbits.codelabs.box2d;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
@@ -20,7 +19,7 @@ import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 import com.leakedbits.codelabs.utils.Test;
 
-public class DragAndDropTest extends Test implements InputProcessor {
+public class DragAndDropTest extends Test {
 
 	/* Use Box2DDebugRenderer, which is a model renderer for debug purposes */
 	private Box2DDebugRenderer debugRenderer;
@@ -96,8 +95,12 @@ public class DragAndDropTest extends Test implements InputProcessor {
 				20 * (Gdx.graphics.getHeight() / (float) Gdx.graphics
 						.getWidth()));
 
-		/* Set input processor to handle events in this test */
-		Gdx.input.setInputProcessor(this);
+		/*
+		 * Next line must remain commented because we do this in its parent (See
+		 * Test class). In case you are not using Test class, uncomment this
+		 * line to set input processor to handle events.
+		 */
+		//Gdx.input.setInputProcessor(this);
 
 		/*
 		 * Instantiate the vector that will be used to store click/touch
@@ -220,22 +223,9 @@ public class DragAndDropTest extends Test implements InputProcessor {
 	}
 
 	@Override
-	public boolean keyDown(int keycode) {
-		return false;
-	}
-
-	@Override
-	public boolean keyUp(int keycode) {
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		return false;
-	}
-
-	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		super.touchDown(screenX, screenY, pointer, button);
+		
 		/*
 		 * Define a new QueryCallback. This callback will be used in
 		 * world.QueryAABB method.
@@ -276,7 +266,8 @@ public class DragAndDropTest extends Test implements InputProcessor {
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-
+		super.touchUp(screenX, screenY, pointer, button);
+		
 		/* Whether the input was processed */
 		boolean processed = false;
 
@@ -292,6 +283,7 @@ public class DragAndDropTest extends Test implements InputProcessor {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		super.touchDragged(screenX, screenY, pointer);
 
 		/* Whether the input was processed */
 		boolean processed = false;
@@ -308,15 +300,5 @@ public class DragAndDropTest extends Test implements InputProcessor {
 
 		return processed;
 	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(int amount) {
-		return false;
-	}
-
+	
 }
