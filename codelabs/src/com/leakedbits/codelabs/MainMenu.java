@@ -60,6 +60,17 @@ public class MainMenu implements Screen {
 		}
 
 		addTestButtons(textButtons);
+
+		TextButton exitButton = new TextButton("Exit", skin, "red");
+		exitButton.pad(10);
+		exitButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				Gdx.app.exit();
+			}
+		});
+		
+		table.add(exitButton).fill();
 		
 		stage.addActor(table);
 
