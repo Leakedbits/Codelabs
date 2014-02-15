@@ -42,6 +42,7 @@ public class MainMenu implements Screen {
 	@Override
 	public void show() {
 		stage = new Stage();
+		stage.setViewport(Codelabs.TARGET_WIDTH, Codelabs.TARGET_WIDTH * (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
 
 		Gdx.input.setInputProcessor(stage);
 
