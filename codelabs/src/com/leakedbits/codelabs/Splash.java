@@ -43,7 +43,7 @@ public class Splash implements Screen {
 				((Game) Gdx.app.getApplicationListener())
 						.setScreen(new MainMenu());
 			}
-		}, 5);
+		}, 4);
 	}
 
 	@Override
