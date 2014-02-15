@@ -24,7 +24,7 @@ public class SpawnBodiesTest extends Test implements InputProcessor {
 	 * that 40 pixels are 1 meter.
 	 */
 	private static final float PIXELS_TO_METERS = 40;
-	
+
 	private static final int MAX_SPAWNED_BALLS = 20;
 
 	/* Use Box2DDebugRenderer, which is a model renderer for debug purposes */
@@ -35,7 +35,7 @@ public class SpawnBodiesTest extends Test implements InputProcessor {
 
 	/* Define a world to hold all bodies and simulate reactions between them */
 	private World world;
-	
+
 	/* Counter to know how many ball have been spawned */
 	private int spawnedBalls;
 
@@ -74,7 +74,7 @@ public class SpawnBodiesTest extends Test implements InputProcessor {
 		 * main menu.
 		 */
 		super.show();
-		
+
 		/*
 		 * Create world with a common gravity vector (9.81 m/s2 downwards force)
 		 * and tell world that we want objects to sleep. This last value
@@ -217,13 +217,15 @@ public class SpawnBodiesTest extends Test implements InputProcessor {
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		
+		/* Checks whether the max amount of balls were spawned */
 		if (spawnedBalls < MAX_SPAWNED_BALLS) {
 			spawnedBalls++;
 
 			/* Translate camera point to world point */
 			Vector3 unprojectedVector = new Vector3();
 			camera.unproject(unprojectedVector.set(screenX, screenY, 0));
-			
+
 			createBall(unprojectedVector.x, unprojectedVector.y);
 		}
 
