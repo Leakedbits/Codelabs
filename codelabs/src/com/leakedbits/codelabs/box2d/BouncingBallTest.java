@@ -31,7 +31,7 @@ public class BouncingBallTest extends Test {
 	public BouncingBallTest() {
 		name = "Bouncing ball";
 	}
-	
+
 	@Override
 	public void render(float delta) {
 		/* Clear screen with a black background */
@@ -53,6 +53,15 @@ public class BouncingBallTest extends Test {
 	@Override
 	public void show() {
 		/*
+		 * This line is found in every test but is not necessary for the sample
+		 * functionality. calls Test.show() method. That method set the test to
+		 * receive all touch and key input events. Also prevents the app from be
+		 * closed whenever the user press back button and instead returns to
+		 * main menu.
+		 */
+		super.show();
+
+		/*
 		 * Create world with a common gravity vector (9.81 m/s2 downwards force)
 		 * and tell world that we want objects to sleep. This last value
 		 * conserves CPU usage.
@@ -64,17 +73,19 @@ public class BouncingBallTest extends Test {
 
 		/*
 		 * Define camera viewport. Box2D uses meters internally so the camera
-		 * must be defined also in meters. We set a desired width and adjust height to
-		 * different resolutions.
+		 * must be defined also in meters. We set a desired width and adjust
+		 * height to different resolutions.
 		 */
-		camera = new OrthographicCamera(20, 20 * (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
+		camera = new OrthographicCamera(20,
+				20 * (Gdx.graphics.getHeight() / (float) Gdx.graphics
+						.getWidth()));
 
 		/* Create all bodies */
 		createBall();
 		createRamp();
 		createWalls();
 	}
-	
+
 	@Override
 	public void hide() {
 
@@ -132,7 +143,7 @@ public class BouncingBallTest extends Test {
 
 		/* Dispose shape once the body is added to the world */
 		ballShape.dispose();
-		
+
 		return body;
 	}
 
@@ -151,8 +162,8 @@ public class BouncingBallTest extends Test {
 
 		/*
 		 * Shape definition. In this case we use a ChainShape that is defined by
-		 * an array of vectors. Our chain start 2.5 meters up and 2.5 meters left
-		 * from the body center (6.5 meters right).
+		 * an array of vectors. Our chain start 2.5 meters up and 2.5 meters
+		 * left from the body center (6.5 meters right).
 		 */
 		ChainShape rampShape = new ChainShape();
 		rampShape.createChain(new Vector2[] { new Vector2(-2.5f, -1),
@@ -173,7 +184,7 @@ public class BouncingBallTest extends Test {
 
 		/* Dispose shape once the body is added to the world */
 		rampShape.dispose();
-		
+
 		return body;
 	}
 
@@ -205,7 +216,7 @@ public class BouncingBallTest extends Test {
 
 		/* Dispose shape once the body is added to the world */
 		wallsShape.dispose();
-		
+
 		return body;
 	}
 
