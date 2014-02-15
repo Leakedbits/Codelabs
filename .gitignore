@@ -39,3 +39,5 @@ RemoteSystemsTempFiles/
 # */.loadpath
 # classpath
 # settings
+
+codelabs-desktop/assets/*

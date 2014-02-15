@@ -1,15 +1,15 @@
 package com.leakedbits.codelabs;
 
 import com.badlogic.gdx.Game;
-import com.leakedbits.codelabs.box2d.BouncingBall;
 
 public class Codelabs extends Game {
 
-	public static final String TITLE = "Leakedbits Codelabs";
+	public static final String TITLE = "Codelabs";
+	public static final float TARGET_WIDTH = 800;
 			
 	@Override
 	public void create() {
-		setScreen(new BouncingBall());		
+		setScreen(new Splash());
 	}
 	
 }
