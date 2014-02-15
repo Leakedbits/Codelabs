@@ -9,7 +9,7 @@ import com.leakedbits.codelabs.MainMenu;
 
 public class Test extends InputAdapter implements Screen {
 	
-	protected String name = "Default test name";
+	protected static String name = "Default test name";
 
 	@Override
 	public void render(float delta) {

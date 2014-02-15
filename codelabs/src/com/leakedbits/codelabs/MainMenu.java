@@ -20,6 +20,8 @@ import com.leakedbits.codelabs.utils.Test;
 import com.leakedbits.codelabs.utils.TestUtils;
 
 public class MainMenu implements Screen {
+	
+	private static final int MAX_TABLE_COLUMNS = 2;
 
 	private Skin skin;
 	private Stage stage;
@@ -53,6 +55,7 @@ public class MainMenu implements Screen {
 
 		table = new Table(skin);
 		table.setFillParent(true);
+		table.defaults().uniformX().pad(3);
 
 		List<TextButton> textButtons = new ArrayList<TextButton>();
 
@@ -78,7 +81,7 @@ public class MainMenu implements Screen {
 					}
 				});
 
-		table.add(exitButton).fill();
+		table.add(exitButton).colspan(MAX_TABLE_COLUMNS).fill();
 
 		stage.addActor(table);
 
@@ -107,9 +110,15 @@ public class MainMenu implements Screen {
 	}
 
 	private void addTestButtons(List<TextButton> textButtons) {
+		int columnCounter = 0;
+		
 		for (TextButton textButton : textButtons) {
-			table.add(textButton).fill().spaceBottom(10);
-			table.row();
+			table.add(textButton).fill();
+			
+			if (++columnCounter >= MAX_TABLE_COLUMNS) {
+				columnCounter = 0;
+				table.row();
+			}
 		}
 
 	}
