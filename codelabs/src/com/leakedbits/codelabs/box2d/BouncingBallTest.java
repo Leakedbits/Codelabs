@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -98,7 +99,7 @@ public class BouncingBallTest extends Test {
 	/**
 	 * Creates a ball and add it to the world.
 	 */
-	private void createBall() {
+	private Body createBall() {
 
 		/*
 		 * Ball body definition. Represents a single point in the world. This
@@ -126,16 +127,19 @@ public class BouncingBallTest extends Test {
 		fixtureDef.restitution = 0.75f;
 
 		/* Create body and fixture */
-		world.createBody(bodyDef).createFixture(fixtureDef);
+		Body body = world.createBody(bodyDef);
+		body.createFixture(fixtureDef);
 
 		/* Dispose shape once the body is added to the world */
 		ballShape.dispose();
+		
+		return body;
 	}
 
 	/**
 	 * Creates a ramp and add it to the world.
 	 */
-	private void createRamp() {
+	private Body createRamp() {
 
 		/*
 		 * Ramp body definition. The ramp will be static because it doesn't move
@@ -164,16 +168,19 @@ public class BouncingBallTest extends Test {
 		fixtureDef.restitution = 0f;
 
 		/* Create body and fixture */
-		world.createBody(bodyDef).createFixture(fixtureDef);
+		Body body = world.createBody(bodyDef);
+		body.createFixture(fixtureDef);
 
 		/* Dispose shape once the body is added to the world */
 		rampShape.dispose();
+		
+		return body;
 	}
 
 	/**
 	 * Creates ceiling, ground and walls and add them to the world.
 	 */
-	private void createWalls() {
+	private Body createWalls() {
 
 		/* Walls body definition */
 		BodyDef bodyDef = new BodyDef();
@@ -192,10 +199,14 @@ public class BouncingBallTest extends Test {
 		fixtureDef.friction = 0.5f;
 		fixtureDef.restitution = 0f;
 
-		/* Body creation */
-		world.createBody(bodyDef).createFixture(fixtureDef);
+		/* Create body and fixture */
+		Body body = world.createBody(bodyDef);
+		body.createFixture(fixtureDef);
 
+		/* Dispose shape once the body is added to the world */
 		wallsShape.dispose();
+		
+		return body;
 	}
 
 }
