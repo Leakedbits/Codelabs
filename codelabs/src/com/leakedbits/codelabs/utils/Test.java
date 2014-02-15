@@ -1,8 +1,13 @@
 package com.leakedbits.codelabs.utils;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
+import com.leakedbits.codelabs.MainMenu;
 
-public class Test implements Screen {
+public class Test extends InputAdapter implements Screen {
 	
 	protected String name = "Default test name";
 
@@ -18,7 +23,8 @@ public class Test implements Screen {
 
 	@Override
 	public void show() {
-		
+		Gdx.input.setInputProcessor(this);
+		Gdx.input.setCatchBackKey(true);
 	}
 
 	@Override
@@ -45,4 +51,12 @@ public class Test implements Screen {
 		return name;
 	}
 
+	@Override
+	public boolean keyDown(int keycode) {
+		if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
+			((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
+		}
+		
+		return true;
+	}
 }

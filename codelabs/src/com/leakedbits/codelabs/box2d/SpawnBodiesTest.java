@@ -1,10 +1,10 @@
 package com.leakedbits.codelabs.box2d;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -15,7 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.leakedbits.codelabs.Codelabs;
 import com.leakedbits.codelabs.utils.Test;
 
-public class SpawnBodiesTest extends Test implements InputProcessor {
+public class SpawnBodiesTest extends Test {
 
 	/*
 	 * As we are using input events in this test, we need to translate
@@ -23,7 +23,7 @@ public class SpawnBodiesTest extends Test implements InputProcessor {
 	 * that 40 pixels are 1 meter.
 	 */
 	private static final float PIXELS_TO_METERS = 40;
-	
+
 	private static final int MAX_SPAWNED_BALLS = 20;
 
 	/* Use Box2DDebugRenderer, which is a model renderer for debug purposes */
@@ -34,7 +34,7 @@ public class SpawnBodiesTest extends Test implements InputProcessor {
 
 	/* Define a world to hold all bodies and simulate reactions between them */
 	private World world;
-	
+
 	/* Counter to know how many ball have been spawned */
 	private int spawnedBalls;
 
@@ -66,6 +66,15 @@ public class SpawnBodiesTest extends Test implements InputProcessor {
 	@Override
 	public void show() {
 		/*
+		 * This line is found in every test but is not necessary for the sample
+		 * functionality. calls Test.show() method. That method set the test to
+		 * receive all touch and key input events. Also prevents the app from be
+		 * closed whenever the user press back button and instead returns to
+		 * main menu.
+		 */
+		super.show();
+
+		/*
 		 * Create world with a common gravity vector (9.81 m/s2 downwards force)
 		 * and tell world that we want objects to sleep. This last value
 		 * conserves CPU usage.
@@ -86,8 +95,12 @@ public class SpawnBodiesTest extends Test implements InputProcessor {
 		camera = new OrthographicCamera(widthMeters, widthMeters
 				* (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
 
-		/* Set input processor to handle events in this test */
-		Gdx.input.setInputProcessor(this);
+		/*
+		 * Next line must remain commented because we do this in its parent (See
+		 * Test class). In case you are not using Test class, uncomment this
+		 * line to set input processor to handle events.
+		 */
+		//Gdx.input.setInputProcessor(this);
 
 		/* Create walls */
 		createWalls();
@@ -185,52 +198,22 @@ public class SpawnBodiesTest extends Test implements InputProcessor {
 	 */
 
 	@Override
-	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean keyUp(int keycode) {
-		return false;
-	}
-
-	@Override
-	public boolean keyTyped(char character) {
-		return false;
-	}
-
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		return false;
-	}
-
-	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		super.touchUp(screenX, screenY, pointer, button);
+		
+		/* Checks whether the max amount of balls were spawned */
 		if (spawnedBalls < MAX_SPAWNED_BALLS) {
 			spawnedBalls++;
 
-			createBall((screenX / PIXELS_TO_METERS) - (camera.viewportWidth / 2),
-					-((screenY / PIXELS_TO_METERS) - (camera.viewportHeight / 2)));
+			/* Translate camera point to world point */
+			Vector3 unprojectedVector = new Vector3();
+			camera.unproject(unprojectedVector.set(screenX, screenY, 0));
 
+			createBall(unprojectedVector.x, unprojectedVector.y);
 		}
 
 		return true;
 	}
 
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-		return false;
-	}
-
-	@Override
-	public boolean scrolled(int amount) {
-		return false;
-	}
 
 }

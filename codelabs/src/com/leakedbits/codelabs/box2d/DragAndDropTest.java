@@ -69,6 +69,15 @@ public class DragAndDropTest extends Test implements InputProcessor {
 	@Override
 	public void show() {
 		/*
+		 * This line is found in every test but is not necessary for the sample
+		 * functionality. calls Test.show() method. That method set the test to
+		 * receive all touch and key input events. Also prevents the app from be
+		 * closed whenever the user press back button and instead returns to
+		 * main menu.
+		 */
+		super.show();
+		
+		/*
 		 * Create world with a common gravity vector (9.81 m/s2 downwards force)
 		 * and tell world that we want objects to sleep. This last value
 		 * conserves CPU usage.
