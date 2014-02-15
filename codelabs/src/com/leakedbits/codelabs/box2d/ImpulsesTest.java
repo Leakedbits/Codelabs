@@ -24,7 +24,7 @@ public class ImpulsesTest extends Test {
 	 * This is a static variable used to define the number of boxes inside our
 	 * test
 	 */
-	private static final int BOX_NUMBERS = 1;
+	private static final int FRAME_NUMBER = 1;
 
 	/* Define a body to later apply impulses to it */
 	private Body box;
@@ -97,7 +97,7 @@ public class ImpulsesTest extends Test {
 						.getWidth()));
 
 		/* Create all bodies */
-		createBoxes(BOX_NUMBERS);
+		createFrames();
 		box = createBox(new Vector2(0, 0));
 
 		// for (Body box : createBoxes(BOX_NUMBERS)) {
@@ -127,14 +127,18 @@ public class ImpulsesTest extends Test {
 		world.dispose();
 	}
 
-	private List<Body> createBoxes(int boxesNumber) {
+	/**
+	 * Split the screen into multiple frames
+	 * @return
+	 */
+	private List<Body> createFrames() {
 		List<Body> boxes = new ArrayList<Body>();
 
 		Vector2 center;
 		float width;
 		float height;
 
-		switch (boxesNumber) {
+		switch (FRAME_NUMBER) {
 		case 1:
 			center = new Vector2(0f, 0f);
 			width = camera.viewportWidth - 1;
@@ -189,20 +193,12 @@ public class ImpulsesTest extends Test {
 		 */
 		Vector2 leftBottomVertex = new Vector2(center.x - width / 2, center.y
 				- height / 2);
-
-		Gdx.app.log("DEBUG", "LB: " + leftBottomVertex);
 		Vector2 leftTopVertex = new Vector2(center.x - width / 2, center.y
 				+ height / 2);
-
-		Gdx.app.log("DEBUG", "LT: " + leftTopVertex);
 		Vector2 rightBottomVertex = new Vector2(center.x + width / 2, center.y
 				- height / 2);
-
-		Gdx.app.log("DEBUG", "RB: " + rightBottomVertex);
 		Vector2 rightTopVertex = new Vector2(center.x + width / 2, center.y
 				+ height / 2);
-
-		Gdx.app.log("DEBUG", "RT: " + rightTopVertex);
 
 		/* Shape definition (the actual shape of the body) */
 		ChainShape boxShape = new ChainShape();
@@ -227,6 +223,11 @@ public class ImpulsesTest extends Test {
 		return body;
 	}
 
+	/**
+	 * Create a ball inside a given container
+	 * @param container Must be a ChainShape
+	 * @return
+	 */
 	private Body createInnerBall(Body container) {
 		/*
 		 * Ball body definition. Represents a single point in the world. This
@@ -324,8 +325,8 @@ public class ImpulsesTest extends Test {
 		/* Calculate the time the user has toucher the screen */
 		long touchedTime = System.currentTimeMillis() - timer;
 
-		/* Every second touching the screen will increment by 10 the impulse */
-		float impulse = Math.max(10f, touchedTime / 100);
+		/* Every second touching the screen will increment by 20 the impulse */
+		float impulse = Math.max(10f, touchedTime / 50);
 
 		/* Reset the timer for future uses */
 		timer = 0L;
