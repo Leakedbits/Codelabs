@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -42,7 +43,8 @@ public class MainMenu implements Screen {
 	@Override
 	public void show() {
 		stage = new Stage();
-		stage.setViewport(Codelabs.TARGET_WIDTH, Codelabs.TARGET_WIDTH * (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
+		stage.setViewport(Codelabs.TARGET_WIDTH, Codelabs.TARGET_WIDTH
+				* (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
 
 		Gdx.input.setInputProcessor(stage);
 
@@ -55,23 +57,29 @@ public class MainMenu implements Screen {
 		List<TextButton> textButtons = new ArrayList<TextButton>();
 
 		for (String name : TestUtils.getNames(Box2DTests.tests, false)) {
-			Test test = TestUtils.instantiateTest(Box2DTests.tests, name);
-			textButtons.add(createTextButton(test.getName(), skin, "blue", test));
+			final Test test = TestUtils.instantiateTest(Box2DTests.tests, name);
+			textButtons.add(createTextButton(test.getName(), skin, "blue",
+					new ClickListener() {
+						@Override
+						public void clicked(InputEvent event, float x, float y) {
+							((Game) Gdx.app.getApplicationListener())
+									.setScreen(test);
+						}
+					}));
 		}
 
 		addTestButtons(textButtons);
 
-		TextButton exitButton = new TextButton("Exit", skin, "red");
-		exitButton.pad(10);
-		exitButton.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				Gdx.app.exit();
-			}
-		});
-		
+		TextButton exitButton = createTextButton("Exit", skin, "red",
+				new ClickListener() {
+					@Override
+					public void clicked(InputEvent event, float x, float y) {
+						Gdx.app.exit();
+					}
+				});
+
 		table.add(exitButton).fill();
-		
+
 		stage.addActor(table);
 
 	}
@@ -103,19 +111,14 @@ public class MainMenu implements Screen {
 			table.add(textButton).fill().spaceBottom(10);
 			table.row();
 		}
-		
+
 	}
-	
+
 	private TextButton createTextButton(String text, Skin skin,
-			String styleName, final Screen screen) {
+			String styleName, EventListener listener) {
 		TextButton textButton = new TextButton(text, skin, styleName);
 		textButton.pad(10);
-		textButton.addListener(new ClickListener() {
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				((Game) Gdx.app.getApplicationListener()).setScreen(screen);
-			}
-		});
+		textButton.addListener(listener);
 
 		return textButton;
 	}
