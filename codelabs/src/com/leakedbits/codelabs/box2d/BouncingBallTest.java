@@ -63,10 +63,10 @@ public class BouncingBallTest extends Test {
 
 		/*
 		 * Define camera viewport. Box2D uses meters internally so the camera
-		 * must be defined also in meters. This code will cause problems while
-		 * resizing that will be solved in future versions.
+		 * must be defined also in meters. We set a desired width and adjust height to
+		 * different resolutions.
 		 */
-		camera = new OrthographicCamera(20, 12);
+		camera = new OrthographicCamera(20, 20 * (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
 
 		/* Create all bodies */
 		createBall();
