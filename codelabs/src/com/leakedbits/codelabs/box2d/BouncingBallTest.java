@@ -202,7 +202,7 @@ public class BouncingBallTest extends Test {
 		ChainShape wallsShape = new ChainShape();
 		wallsShape.createChain(new Vector2[] { new Vector2(-9, -5),
 				new Vector2(9, -5), new Vector2(9, 5), new Vector2(-9, 5),
-				new Vector2(-9, -3), new Vector2(-9, -5) });
+				new Vector2(-9, -5) });
 
 		/* Fixture definition */
 		FixtureDef fixtureDef = new FixtureDef();
