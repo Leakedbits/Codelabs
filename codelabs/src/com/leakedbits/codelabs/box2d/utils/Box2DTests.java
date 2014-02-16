@@ -8,6 +8,7 @@ import com.leakedbits.codelabs.box2d.BouncingBallTest;
 import com.leakedbits.codelabs.box2d.DragAndDropTest;
 import com.leakedbits.codelabs.box2d.ImpulsesTest;
 import com.leakedbits.codelabs.box2d.SpawnBodiesTest;
+import com.leakedbits.codelabs.box2d.SpritesTest;
 import com.leakedbits.codelabs.utils.Test;
 
 public class Box2DTests {
@@ -18,7 +19,8 @@ public class Box2DTests {
 					BouncingBallTest.class,
 					SpawnBodiesTest.class,
 					DragAndDropTest.class,
-					ImpulsesTest.class
+					ImpulsesTest.class,
+					SpritesTest.class
 			)
 	);
 
