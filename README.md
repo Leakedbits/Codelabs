@@ -13,7 +13,7 @@ A simple rounded object interacting with its environment: a box with a ramp wher
 
 Here you will lear how to spawn an OrthographicCamera for showing the World, how to create Body objects such as walls (StaticBody, ChainShape), ramps (leaning ChainShape) and balls (DynamicBody, CircleShape).
 
-Ckeck out a further explaination in [our Wiki](https://github.com/Leakedbits/Codelabs/wiki)!
+Ckeck out a further explaination in [our Wiki](https://github.com/Leakedbits/Codelabs/wiki/Bouncing-ball)!
 
 <h4>Spawn bodies on touch</h4>
 
