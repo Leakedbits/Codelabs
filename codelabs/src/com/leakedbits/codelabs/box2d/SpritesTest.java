@@ -208,6 +208,7 @@ public class SpritesTest extends Test {
 
 		/* Shape definition (the actual shape of the body) */
 		PolygonShape boxShape = new PolygonShape();
+		
 		/*
 		 * We use setAsBox to define a 2 meters wide 2 meters tall box. We have
 		 * to specify half-width and half-height to the method.
