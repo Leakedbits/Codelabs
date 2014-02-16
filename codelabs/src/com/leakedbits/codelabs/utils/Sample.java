@@ -7,9 +7,9 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.leakedbits.codelabs.MainMenu;
 
-public class Test extends InputAdapter implements Screen {
+public class Sample extends InputAdapter implements Screen {
 	
-	protected static String name = "Default test name";
+	protected static String name = "Default sample name";
 
 	@Override
 	public void render(float delta) {

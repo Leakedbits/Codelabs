@@ -4,17 +4,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.World;
-import com.leakedbits.codelabs.utils.Test;
+import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
+import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
+import com.leakedbits.codelabs.utils.Sample;
 
-public class BouncingBallTest extends Test {
+public class DragAndDropSample extends Sample {
 
 	/* Use Box2DDebugRenderer, which is a model renderer for debug purposes */
 	private Box2DDebugRenderer debugRenderer;
@@ -25,11 +30,21 @@ public class BouncingBallTest extends Test {
 	/* Define a world to hold all bodies and simulate reactions between them */
 	private World world;
 
-	/**
-	 * Main constructor used to update test name.
+	/*
+	 * Used to define a mouse joint for a body. This point will track a
+	 * specified world point.
 	 */
-	public BouncingBallTest() {
-		name = "Bouncing ball";
+	private MouseJoint mouseJoint;
+	private MouseJointDef mouseJointDef;
+
+	/* Store the position of the last touch or mouse click */
+	private Vector3 touchPosition;
+
+	/**
+	 * Main constructor used to update sample name.
+	 */
+	public DragAndDropSample() {
+		name = "Drag and drop";
 	}
 
 	@Override
@@ -53,14 +68,14 @@ public class BouncingBallTest extends Test {
 	@Override
 	public void show() {
 		/*
-		 * This line is found in every test but is not necessary for the sample
-		 * functionality. calls Test.show() method. That method set the test to
+		 * This line is found in every sample but is not necessary for the sample
+		 * functionality. calls Sample.show() method. That method set the sample to
 		 * receive all touch and key input events. Also prevents the app from be
 		 * closed whenever the user press back button and instead returns to
 		 * main menu.
 		 */
 		super.show();
-
+		
 		/*
 		 * Create world with a common gravity vector (9.81 m/s2 downwards force)
 		 * and tell world that we want objects to sleep. This last value
@@ -80,10 +95,25 @@ public class BouncingBallTest extends Test {
 				20 * (Gdx.graphics.getHeight() / (float) Gdx.graphics
 						.getWidth()));
 
+		/*
+		 * Next line must remain commented because we do this in its parent (See
+		 * Sample class). In case you are not using Sample class, uncomment this
+		 * line to set input processor to handle events.
+		 */
+		//Gdx.input.setInputProcessor(this);
+
+		/*
+		 * Instantiate the vector that will be used to store click/touch
+		 * positions.
+		 */
+		touchPosition = new Vector3();
+
 		/* Create all bodies */
 		createBall();
-		createRamp();
-		createWalls();
+		Body walls = createWalls();
+
+		/* Define the mouse joint. We use walls as the first body of the joint */
+		createMouseJointDefinition(walls);
 	}
 
 	@Override
@@ -120,11 +150,11 @@ public class BouncingBallTest extends Test {
 		 */
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
-		bodyDef.position.set(6, 5);
+		bodyDef.position.set(0, 0);
 
 		/* Shape definition (the actual shape of the body) */
 		CircleShape ballShape = new CircleShape();
-		ballShape.setRadius(0.15f);
+		ballShape.setRadius(1);
 
 		/*
 		 * Fixture definition. Let us define properties of a body like the
@@ -148,47 +178,6 @@ public class BouncingBallTest extends Test {
 	}
 
 	/**
-	 * Creates a ramp and add it to the world.
-	 */
-	private Body createRamp() {
-
-		/*
-		 * Ramp body definition. The ramp will be static because it doesn't move
-		 * are doesn't need be affected by other objects.
-		 */
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.StaticBody;
-		bodyDef.position.set(6.5f, 0f);
-
-		/*
-		 * Shape definition. In this case we use a ChainShape that is defined by
-		 * an array of vectors. Our chain start 2.5 meters up and 2.5 meters
-		 * left from the body center (6.5 meters right).
-		 */
-		ChainShape rampShape = new ChainShape();
-		rampShape.createChain(new Vector2[] { new Vector2(-2.5f, -1),
-				new Vector2(2.5f, 1) });
-
-		/*
-		 * Fixture definition. As this object is static, we don't need to define
-		 * a density.
-		 */
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = rampShape;
-		fixtureDef.friction = 0.3f;
-		fixtureDef.restitution = 0f;
-
-		/* Create body and fixture */
-		Body body = world.createBody(bodyDef);
-		body.createFixture(fixtureDef);
-
-		/* Dispose shape once the body is added to the world */
-		rampShape.dispose();
-
-		return body;
-	}
-
-	/**
 	 * Creates ceiling, ground and walls and add them to the world.
 	 */
 	private Body createWalls() {
@@ -202,7 +191,7 @@ public class BouncingBallTest extends Test {
 		ChainShape wallsShape = new ChainShape();
 		wallsShape.createChain(new Vector2[] { new Vector2(-9, -5),
 				new Vector2(9, -5), new Vector2(9, 5), new Vector2(-9, 5),
-				new Vector2(-9, -5) });
+				new Vector2(-9, -3), new Vector2(-9, -5) });
 
 		/* Fixture definition */
 		FixtureDef fixtureDef = new FixtureDef();
@@ -220,4 +209,96 @@ public class BouncingBallTest extends Test {
 		return body;
 	}
 
+	/**
+	 * Creates the MouseJoint definition.
+	 * 
+	 * @param body
+	 *            First body of the joint (i.e. ground, walls, etc.)
+	 */
+	private void createMouseJointDefinition(Body body) {
+		mouseJointDef = new MouseJointDef();
+		mouseJointDef.bodyA = body;
+		mouseJointDef.collideConnected = true;
+		mouseJointDef.maxForce = 500;
+	}
+
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		super.touchDown(screenX, screenY, pointer, button);
+		
+		/*
+		 * Define a new QueryCallback. This callback will be used in
+		 * world.QueryAABB method.
+		 */
+		QueryCallback queryCallback = new QueryCallback() {
+
+			@Override
+			public boolean reportFixture(Fixture fixture) {
+				boolean testResult;
+
+				/*
+				 * If the hit point is inside the fixture of the body, create a
+				 * new MouseJoint.
+				 */
+				if (testResult = fixture.testPoint(touchPosition.x,
+						touchPosition.y)) {
+					mouseJointDef.bodyB = fixture.getBody();
+					mouseJointDef.target.set(touchPosition.x, touchPosition.y);
+					mouseJoint = (MouseJoint) world.createJoint(mouseJointDef);
+				}
+
+				return testResult;
+			}
+		};
+
+		/* Translate camera point to world point */
+		camera.unproject(touchPosition.set(screenX, screenY, 0));
+
+		/*
+		 * Query the world for all fixtures that potentially overlap the touched
+		 * point.
+		 */
+		world.QueryAABB(queryCallback, touchPosition.x, touchPosition.y,
+				touchPosition.x, touchPosition.y);
+
+		return true;
+	}
+
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		super.touchUp(screenX, screenY, pointer, button);
+		
+		/* Whether the input was processed */
+		boolean processed = false;
+
+		/* If a MouseJoint is defined, destroy it */
+		if (mouseJoint != null) {
+			world.destroyJoint(mouseJoint);
+			mouseJoint = null;
+			processed = true;
+		}
+
+		return processed;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		super.touchDragged(screenX, screenY, pointer);
+
+		/* Whether the input was processed */
+		boolean processed = false;
+
+		/*
+		 * If a MouseJoint is defined, update its target with current position.
+		 */
+		if (mouseJoint != null) {
+
+			/* Translate camera point to world point */
+			camera.unproject(touchPosition.set(screenX, screenY, 0));
+			mouseJoint.setTarget(new Vector2(touchPosition.x, touchPosition.y));
+		}
+
+		return processed;
+	}
+	
 }

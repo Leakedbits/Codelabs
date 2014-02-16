@@ -15,9 +15,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.leakedbits.codelabs.box2d.utils.Box2DTests;
-import com.leakedbits.codelabs.utils.Test;
-import com.leakedbits.codelabs.utils.TestUtils;
+import com.leakedbits.codelabs.box2d.utils.Box2DSamples;
+import com.leakedbits.codelabs.utils.Sample;
+import com.leakedbits.codelabs.utils.SampleUtils;
 
 public class MainMenu implements Screen {
 	
@@ -59,19 +59,19 @@ public class MainMenu implements Screen {
 
 		List<TextButton> textButtons = new ArrayList<TextButton>();
 
-		for (String name : TestUtils.getNames(Box2DTests.tests, false)) {
-			final Test test = TestUtils.instantiateTest(Box2DTests.tests, name);
-			textButtons.add(createTextButton(test.getName(), skin, "blue",
+		for (String name : SampleUtils.getNames(Box2DSamples.SAMPLES, false)) {
+			final Sample sample = SampleUtils.instantiateSample(Box2DSamples.SAMPLES, name);
+			textButtons.add(createTextButton(sample.getName(), skin, "blue",
 					new ClickListener() {
 						@Override
 						public void clicked(InputEvent event, float x, float y) {
 							((Game) Gdx.app.getApplicationListener())
-									.setScreen(test);
+									.setScreen(sample);
 						}
 					}));
 		}
 
-		addTestButtons(textButtons);
+		addSampleButtons(textButtons);
 
 		TextButton exitButton = createTextButton("Exit", skin, "red",
 				new ClickListener() {
@@ -109,7 +109,7 @@ public class MainMenu implements Screen {
 		stage.dispose();
 	}
 
-	private void addTestButtons(List<TextButton> textButtons) {
+	private void addSampleButtons(List<TextButton> textButtons) {
 		int columnCounter = 0;
 		
 		for (TextButton textButton : textButtons) {

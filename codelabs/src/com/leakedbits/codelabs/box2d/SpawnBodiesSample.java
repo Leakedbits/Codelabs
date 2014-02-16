@@ -13,12 +13,12 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.leakedbits.codelabs.Codelabs;
-import com.leakedbits.codelabs.utils.Test;
+import com.leakedbits.codelabs.utils.Sample;
 
-public class SpawnBodiesTest extends Test {
+public class SpawnBodiesSample extends Sample {
 
 	/*
-	 * As we are using input events in this test, we need to translate
+	 * As we are using input events in this sample, we need to translate
 	 * coordinates from pixels to meters, so we use this variable that specifies
 	 * that 40 pixels are 1 meter.
 	 */
@@ -39,9 +39,9 @@ public class SpawnBodiesTest extends Test {
 	private int spawnedBalls;
 
 	/**
-	 * Main constructor used to update test name.
+	 * Main constructor used to update sample name.
 	 */
-	public SpawnBodiesTest() {
+	public SpawnBodiesSample() {
 		name = "Spawn bodies on touch";
 	}
 
@@ -66,8 +66,8 @@ public class SpawnBodiesTest extends Test {
 	@Override
 	public void show() {
 		/*
-		 * This line is found in every test but is not necessary for the sample
-		 * functionality. calls Test.show() method. That method set the test to
+		 * This line is found in every sample but is not necessary for the sample
+		 * functionality. calls Sample.show() method. That method set the sample to
 		 * receive all touch and key input events. Also prevents the app from be
 		 * closed whenever the user press back button and instead returns to
 		 * main menu.
@@ -97,7 +97,7 @@ public class SpawnBodiesTest extends Test {
 
 		/*
 		 * Next line must remain commented because we do this in its parent (See
-		 * Test class). In case you are not using Test class, uncomment this
+		 * Sample class). In case you are not using Sample class, uncomment this
 		 * line to set input processor to handle events.
 		 */
 		//Gdx.input.setInputProcessor(this);
