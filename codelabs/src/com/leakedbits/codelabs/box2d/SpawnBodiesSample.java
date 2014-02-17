@@ -190,7 +190,6 @@ public class SpawnBodiesSample extends Sample {
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		super.touchUp(screenX, screenY, pointer, button);
 
 		/* Checks whether the max amount of balls were spawned */
 		if (spawnedBalls < MAX_SPAWNED_BALLS) {

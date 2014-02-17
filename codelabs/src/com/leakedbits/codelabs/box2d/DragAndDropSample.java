@@ -224,8 +224,6 @@ public class DragAndDropSample extends Sample {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		super.touchDown(screenX, screenY, pointer, button);
-		
 		/*
 		 * Define a new QueryCallback. This callback will be used in
 		 * world.QueryAABB method.
@@ -266,8 +264,7 @@ public class DragAndDropSample extends Sample {
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		super.touchUp(screenX, screenY, pointer, button);
-		
+
 		/* Whether the input was processed */
 		boolean processed = false;
 
@@ -283,7 +280,6 @@ public class DragAndDropSample extends Sample {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		super.touchDragged(screenX, screenY, pointer);
 
 		/* Whether the input was processed */
 		boolean processed = false;

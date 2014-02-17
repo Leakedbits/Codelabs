@@ -274,8 +274,10 @@ public class SpritesSample extends Sample {
 	 */
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		super.touchDown(screenX, screenY, pointer, button);
-
+		/*
+		 * Get current time in milliseconds. We will use this to calculate the
+		 * time the user has touched the screen.
+		 */
 		this.timer = System.currentTimeMillis();
 
 		return true;

@@ -59,11 +59,11 @@ public class ImpulsesSample extends Sample {
 	@Override
 	public void show() {
 		/*
-		 * This line is found in every sample but is not necessary for the sample
-		 * functionality. calls Sample.show() method. That method set the sample to
-		 * receive all touch and key input events. Also prevents the app from be
-		 * closed whenever the user press back button and instead returns to
-		 * main menu.
+		 * This line is found in every sample but is not necessary for the
+		 * sample functionality. calls Sample.show() method. That method set the
+		 * sample to receive all touch and key input events. Also prevents the
+		 * app from be closed whenever the user press back button and instead
+		 * returns to main menu.
 		 */
 		super.show();
 
@@ -85,13 +85,13 @@ public class ImpulsesSample extends Sample {
 		camera = new OrthographicCamera(20,
 				20 * (Gdx.graphics.getHeight() / (float) Gdx.graphics
 						.getWidth()));
-		
+
 		/*
 		 * Next line must remain commented because we do this in its parent (See
 		 * Sample class). In case you are not using Sample class, uncomment this
 		 * line to set input processor to handle events.
 		 */
-		//Gdx.input.setInputProcessor(this);
+		// Gdx.input.setInputProcessor(this);
 
 		/* Create all bodies */
 		box = createBox();
@@ -134,7 +134,7 @@ public class ImpulsesSample extends Sample {
 
 		/* Shape definition (the actual shape of the body) */
 		PolygonShape boxShape = new PolygonShape();
-		
+
 		/*
 		 * We use setAsBox to define a 2 meters wide 2 meters tall box. We have
 		 * to specify half-width and half-height to the method.
@@ -200,8 +200,10 @@ public class ImpulsesSample extends Sample {
 	 */
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		super.touchDown(screenX, screenY, pointer, button);
-
+		/*
+		 * Get current time in milliseconds. We will use this to calculate the
+		 * time the user has touched the screen.
+		 */
 		this.timer = System.currentTimeMillis();
 
 		return true;
@@ -213,7 +215,6 @@ public class ImpulsesSample extends Sample {
 	 */
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		super.touchUp(screenX, screenY, pointer, button);
 
 		/* Calculate the time the user has touched the screen */
 		long touchedTime = System.currentTimeMillis() - timer;
