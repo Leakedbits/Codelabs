@@ -9,14 +9,4 @@ Take a look at our [Codelabs app] (https://play.google.com/store/apps/details?id
 
 <h3>Available demos and code so far</h3>
 
-Ckeck out a further explaination of them in [our Wiki](https://github.com/Leakedbits/Codelabs/wiki/Bouncing-ball)!
-
-<h4>Bouncing ball (Box2d)</h4>
-A simple rounded object interacting with its environment: a box with a ramp where the ball will bounce.
-
-Here you will lear how to spawn an OrthographicCamera for showing the World, how to create Body objects such as walls (StaticBody, ChainShape), ramps (leaning ChainShape) and balls (DynamicBody, CircleShape).
-
-<h4>Spawn bodies on touch</h4>
-
-
-<h4>Drag and drop</h4>
+Ckeck out a further explaination of them in [our Wiki](https://github.com/Leakedbits/Codelabs/wiki)!
