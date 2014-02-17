@@ -12,18 +12,11 @@ import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.leakedbits.codelabs.Codelabs;
 import com.leakedbits.codelabs.utils.Sample;
 
 public class SpawnBodiesSample extends Sample {
 
-	/*
-	 * As we are using input events in this sample, we need to translate
-	 * coordinates from pixels to meters, so we use this variable that specifies
-	 * that 40 pixels are 1 meter.
-	 */
-	private static final float PIXELS_TO_METERS = 40;
-
+	/* Max number of balls to be spawned */
 	private static final int MAX_SPAWNED_BALLS = 20;
 
 	/* Use Box2DDebugRenderer, which is a model renderer for debug purposes */
@@ -66,11 +59,11 @@ public class SpawnBodiesSample extends Sample {
 	@Override
 	public void show() {
 		/*
-		 * This line is found in every sample but is not necessary for the sample
-		 * functionality. calls Sample.show() method. That method set the sample to
-		 * receive all touch and key input events. Also prevents the app from be
-		 * closed whenever the user press back button and instead returns to
-		 * main menu.
+		 * This line is found in every sample but is not necessary for the
+		 * sample functionality. calls Sample.show() method. That method set the
+		 * sample to receive all touch and key input events. Also prevents the
+		 * app from be closed whenever the user press back button and instead
+		 * returns to main menu.
 		 */
 		super.show();
 
@@ -87,20 +80,18 @@ public class SpawnBodiesSample extends Sample {
 		/*
 		 * Define camera viewport. Box2D uses meters internally so the camera
 		 * must be defined also in meters. We set a desired width and adjust
-		 * height to different resolutions. In this text we are using
-		 * PIXELS_TO_METERS to calculate the viewport with but will not be used
-		 * in other samples to make the code more readable and easier to follow.
+		 * height to different resolutions.
 		 */
-		float widthMeters = Codelabs.TARGET_WIDTH / PIXELS_TO_METERS;
-		camera = new OrthographicCamera(widthMeters, widthMeters
-				* (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
+		camera = new OrthographicCamera(20,
+				20 * (Gdx.graphics.getHeight() / (float) Gdx.graphics
+						.getWidth()));
 
 		/*
 		 * Next line must remain commented because we do this in its parent (See
 		 * Sample class). In case you are not using Sample class, uncomment this
 		 * line to set input processor to handle events.
 		 */
-		//Gdx.input.setInputProcessor(this);
+		// Gdx.input.setInputProcessor(this);
 
 		/* Create walls */
 		createWalls();
@@ -200,7 +191,7 @@ public class SpawnBodiesSample extends Sample {
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		super.touchUp(screenX, screenY, pointer, button);
-		
+
 		/* Checks whether the max amount of balls were spawned */
 		if (spawnedBalls < MAX_SPAWNED_BALLS) {
 			spawnedBalls++;
@@ -214,6 +205,5 @@ public class SpawnBodiesSample extends Sample {
 
 		return true;
 	}
-
 
 }
