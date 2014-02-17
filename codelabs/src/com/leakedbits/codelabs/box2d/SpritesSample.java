@@ -156,7 +156,7 @@ public class SpritesSample extends Sample {
 		 * working in pixels, but with meters. The size of the sprite will be
 		 * the same as the size of the box; 2 meter wide, 2 meters tall.
 		 */
-		sprite.setSize(2, 2);
+		sprite.setSize(3, 3);
 
 		/*
 		 * Sets the origin in relation to the sprite's position for scaling and
@@ -210,10 +210,10 @@ public class SpritesSample extends Sample {
 		PolygonShape boxShape = new PolygonShape();
 		
 		/*
-		 * We use setAsBox to define a 2 meters wide 2 meters tall box. We have
+		 * We use setAsBox to define a 3 meters wide 3 meters tall box. We have
 		 * to specify half-width and half-height to the method.
 		 */
-		boxShape.setAsBox(1, 1);
+		boxShape.setAsBox(1.5f, 1.5f);
 
 		/*
 		 * Fixture definition. Let us define properties of a body like the
@@ -222,8 +222,8 @@ public class SpritesSample extends Sample {
 		 */
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = boxShape;
-		fixtureDef.density = 0.5f;
-		fixtureDef.friction = 1f;
+		fixtureDef.density = 0.4f;
+		fixtureDef.friction = 0.5f;
 		fixtureDef.restitution = 0.5f;
 
 		/* Create body and fixture */

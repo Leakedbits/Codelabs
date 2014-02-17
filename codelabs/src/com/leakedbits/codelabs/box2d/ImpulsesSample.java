@@ -149,7 +149,7 @@ public class ImpulsesSample extends Sample {
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = boxShape;
 		fixtureDef.density = 0.5f;
-		fixtureDef.friction = 1f;
+		fixtureDef.friction = 0.5f;
 		fixtureDef.restitution = 0.5f;
 
 		/* Create body and fixture */
