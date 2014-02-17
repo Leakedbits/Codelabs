@@ -40,6 +40,7 @@ public class Splash implements Screen {
 
 			@Override
 			public void run() {
+				dispose();
 				((Game) Gdx.app.getApplicationListener())
 						.setScreen(new MainMenu());
 			}

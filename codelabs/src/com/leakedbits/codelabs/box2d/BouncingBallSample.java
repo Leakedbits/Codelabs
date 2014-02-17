@@ -88,17 +88,14 @@ public class BouncingBallSample extends Sample {
 
 	@Override
 	public void hide() {
-
 	}
 
 	@Override
 	public void pause() {
-
 	}
 
 	@Override
 	public void resume() {
-
 	}
 
 	@Override
