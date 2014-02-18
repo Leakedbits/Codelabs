@@ -55,6 +55,7 @@ public class Sample extends InputAdapter implements Screen {
 	public boolean keyDown(int keycode) {
 		if (keycode == Keys.BACK || keycode == Keys.ESCAPE) {
 			dispose();
+			Gdx.input.setCatchBackKey(false);
 			((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenu());
 		}
 		
