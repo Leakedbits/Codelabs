@@ -151,7 +151,7 @@ public class ImpulsesSample extends Sample {
 		fixtureDef.density = 0.5f;
 		fixtureDef.friction = 0.5f;
 		fixtureDef.restitution = 0.5f;
-
+		
 		/* Create body and fixture */
 		Body body = world.createBody(bodyDef);
 		body.createFixture(fixtureDef);

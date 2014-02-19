@@ -7,6 +7,7 @@ import java.util.List;
 import com.leakedbits.codelabs.box2d.BouncingBallSample;
 import com.leakedbits.codelabs.box2d.DragAndDropSample;
 import com.leakedbits.codelabs.box2d.ImpulsesSample;
+import com.leakedbits.codelabs.box2d.SensorsSample;
 import com.leakedbits.codelabs.box2d.SpawnBodiesSample;
 import com.leakedbits.codelabs.box2d.SpritesSample;
 import com.leakedbits.codelabs.utils.Sample;
@@ -20,7 +21,8 @@ public class Box2DSamples {
 					SpawnBodiesSample.class,
 					DragAndDropSample.class,
 					ImpulsesSample.class,
-					SpritesSample.class
+					SpritesSample.class,
+					SensorsSample.class
 			)
 	);
 
