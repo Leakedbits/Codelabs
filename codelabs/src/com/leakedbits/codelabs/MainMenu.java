@@ -8,9 +8,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -20,7 +22,7 @@ import com.leakedbits.codelabs.utils.Sample;
 import com.leakedbits.codelabs.utils.SampleUtils;
 
 public class MainMenu implements Screen {
-	
+
 	private static final int MAX_TABLE_COLUMNS = 2;
 
 	private Skin skin;
@@ -45,8 +47,12 @@ public class MainMenu implements Screen {
 	@Override
 	public void show() {
 		stage = new Stage();
-		stage.setViewport(Codelabs.TARGET_WIDTH, Codelabs.TARGET_WIDTH
-				* (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
+
+		final float computedHeight = Codelabs.TARGET_WIDTH
+				* (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth());
+		stage.setViewport(Codelabs.TARGET_WIDTH, computedHeight);
+		stage.addAction(Actions.sequence(Actions.moveBy(0, computedHeight),
+				Actions.delay(0.25f, Actions.moveBy(0, -computedHeight, 1.5f, Interpolation.swingOut))));
 
 		Gdx.input.setInputProcessor(stage);
 
@@ -60,7 +66,8 @@ public class MainMenu implements Screen {
 		List<TextButton> textButtons = new ArrayList<TextButton>();
 
 		for (String name : SampleUtils.getNames(Box2DSamples.SAMPLES, false)) {
-			final Sample sample = SampleUtils.instantiateSample(Box2DSamples.SAMPLES, name);
+			final Sample sample = SampleUtils.instantiateSample(
+					Box2DSamples.SAMPLES, name);
 			textButtons.add(createTextButton(sample.getName(), skin, "blue",
 					new ClickListener() {
 						@Override
@@ -112,10 +119,10 @@ public class MainMenu implements Screen {
 
 	private void addSampleButtons(List<TextButton> textButtons) {
 		int columnCounter = 0;
-		
+
 		for (TextButton textButton : textButtons) {
 			table.add(textButton).fill();
-			
+
 			if (++columnCounter >= MAX_TABLE_COLUMNS) {
 				columnCounter = 0;
 				table.row();
