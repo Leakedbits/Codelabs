@@ -9,14 +9,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.ChainShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.leakedbits.codelabs.box2d.utils.Box2DFactory;
 import com.leakedbits.codelabs.utils.Sample;
 
 public class SpritesSample extends Sample {
@@ -108,11 +105,11 @@ public class SpritesSample extends Sample {
 	@Override
 	public void show() {
 		/*
-		 * This line is found in every sample but is not necessary for the sample
-		 * functionality. calls Sample.show() method. That method set the sample to
-		 * receive all touch and key input events. Also prevents the app from be
-		 * closed whenever the user press back button and instead returns to
-		 * main menu.
+		 * This line is found in every sample but is not necessary for the
+		 * sample functionality. calls Sample.show() method. That method set the
+		 * sample to receive all touch and key input events. Also prevents the
+		 * app from be closed whenever the user press back button and instead
+		 * returns to main menu.
 		 */
 		super.show();
 
@@ -145,8 +142,13 @@ public class SpritesSample extends Sample {
 		// Gdx.input.setInputProcessor(this);
 
 		/* Create all bodies */
-		box = createBox();
-		createWalls();
+		/* Create the box */
+		box = Box2DFactory.createBox(world, BodyType.DynamicBody, new Vector2(
+				0, 0), 1.5f, 1.5f, 0.3f, 0.5f, 0.5f);
+
+		/* Create the walls */
+		Box2DFactory.createWalls(world, camera.viewportWidth,
+				camera.viewportHeight, 1, 1, 1);
 
 		/* Set box texture */
 		sprite = new Sprite(new Texture("data/images/crab.png"));
@@ -193,81 +195,6 @@ public class SpritesSample extends Sample {
 		world.dispose();
 	}
 
-	/**
-	 * Create a box and add it to the world.
-	 */
-	private Body createBox() {
-		/*
-		 * Box body definition. Represents a single point in the world. This
-		 * body will be static because will be used to store objects inside and
-		 * shouldn't interact with the environment
-		 */
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.DynamicBody;
-		bodyDef.position.set(0, 0);
-
-		/* Shape definition (the actual shape of the body) */
-		PolygonShape boxShape = new PolygonShape();
-		
-		/*
-		 * We use setAsBox to define a 3 meters wide 3 meters tall box. We have
-		 * to specify half-width and half-height to the method.
-		 */
-		boxShape.setAsBox(1.5f, 1.5f);
-
-		/*
-		 * Fixture definition. Let us define properties of a body like the
-		 * shape, the density of the body, its friction or its restitution (how
-		 * 'bouncy' a fixture is) in a physics scene.
-		 */
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = boxShape;
-		fixtureDef.density = 0.4f;
-		fixtureDef.friction = 0.5f;
-		fixtureDef.restitution = 0.5f;
-
-		/* Create body and fixture */
-		Body body = world.createBody(bodyDef);
-		body.createFixture(fixtureDef);
-
-		/* Dispose shape once the body is added to the world */
-		boxShape.dispose();
-
-		return body;
-	}
-
-	/**
-	 * Creates ceiling, ground and walls and add them to the world.
-	 */
-	private Body createWalls() {
-
-		/* Walls body definition */
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.StaticBody;
-		bodyDef.position.set(0, 0f);
-
-		/* Shape definition */
-		ChainShape wallsShape = new ChainShape();
-		wallsShape.createChain(new Vector2[] { new Vector2(-9, -5),
-				new Vector2(9, -5), new Vector2(9, 5), new Vector2(-9, 5),
-				new Vector2(-9, -3), new Vector2(-9, -5) });
-
-		/* Fixture definition */
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = wallsShape;
-		fixtureDef.friction = 0.5f;
-		fixtureDef.restitution = 0f;
-
-		/* Create body and fixture */
-		Body body = world.createBody(bodyDef);
-		body.createFixture(fixtureDef);
-
-		/* Dispose shape once the body is added to the world */
-		wallsShape.dispose();
-
-		return body;
-	}
-
 	/*
 	 * Input events handling. Here will start our timer, which will be used
 	 * before.
@@ -303,7 +230,8 @@ public class SpritesSample extends Sample {
 		 * object is falling the impulse will be the difference between the
 		 * object speed and the given value.
 		 */
-		box.applyLinearImpulse(0, impulse, 0, 0, true);
+		box.applyLinearImpulse(new Vector2(0, impulse), box.getWorldCenter(),
+				true);
 
 		return true;
 	}

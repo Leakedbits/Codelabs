@@ -5,13 +5,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.ChainShape;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.leakedbits.codelabs.box2d.utils.Box2DFactory;
 import com.leakedbits.codelabs.utils.Sample;
 
 public class GravityAccelerometerSample extends Sample {
@@ -100,8 +97,9 @@ public class GravityAccelerometerSample extends Sample {
 		 */
 		// Gdx.input.setInputProcessor(this);
 
-		/* Create walls */
-		createWalls();
+		/* Create the walls */
+		Box2DFactory.createWalls(world, camera.viewportWidth,
+				camera.viewportHeight, 1, 1, 1);
 	}
 
 	@Override
@@ -123,71 +121,6 @@ public class GravityAccelerometerSample extends Sample {
 	public void dispose() {
 		debugRenderer.dispose();
 		world.dispose();
-	}
-
-	/**
-	 * Creates a ball and add it to the world.
-	 */
-	private void createBall(float x, float y) {
-
-		/*
-		 * Ball body definition. Represents a single point in the world. This
-		 * body will be dynamic because the ball must interact with the
-		 * environment and will be set 6 meters right and 5 meters up from
-		 * viewport center.
-		 */
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.DynamicBody;
-		bodyDef.position.set(x, y);
-
-		/* Shape definition (the actual shape of the body) */
-		CircleShape ballShape = new CircleShape();
-		ballShape.setRadius(1f);
-
-		/*
-		 * Fixture definition. Let us define properties of a body like the
-		 * shape, the density of the body, its friction or its restitution (how
-		 * 'bouncy' a fixture is) in a physics scene.
-		 */
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = ballShape;
-		fixtureDef.density = 2.5f;
-		fixtureDef.friction = 0.25f;
-		fixtureDef.restitution = 0.75f;
-
-		/* Create body and fixture */
-		world.createBody(bodyDef).createFixture(fixtureDef);
-
-		/* Dispose shape once the body is added to the world */
-		ballShape.dispose();
-	}
-
-	/**
-	 * Creates ceiling, ground and walls and add them to the world.
-	 */
-	private void createWalls() {
-
-		/* Walls body definition */
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.StaticBody;
-		bodyDef.position.set(0, 0);
-
-		/* Shape definition */
-		ChainShape wallsShape = new ChainShape();
-		wallsShape.createChain(new Vector2[] { new Vector2(-9, -5),
-				new Vector2(9, -5), new Vector2(9, 5), new Vector2(-9, 5),
-				new Vector2(-9, -3), new Vector2(-9, -5) });
-
-		/* Fixture definition */
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = wallsShape;
-		fixtureDef.friction = 0.5f;
-		fixtureDef.restitution = 0f;
-
-		/* Body creation */
-		world.createBody(bodyDef).createFixture(fixtureDef);
-
-		wallsShape.dispose();
 	}
 
 	private void processAccelerometer() {
@@ -227,7 +160,10 @@ public class GravityAccelerometerSample extends Sample {
 			Vector3 unprojectedVector = new Vector3();
 			camera.unproject(unprojectedVector.set(screenX, screenY, 0));
 
-			createBall(unprojectedVector.x, unprojectedVector.y);
+			/* Create a new ball */
+			Box2DFactory.createCircle(world, BodyType.DynamicBody, new Vector2(
+					unprojectedVector.x, unprojectedVector.y), 1, 2.5f,
+					0.25f, 0.75f);
 		}
 
 		return true;

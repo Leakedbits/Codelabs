@@ -6,17 +6,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.ChainShape;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
+import com.leakedbits.codelabs.box2d.utils.Box2DFactory;
 import com.leakedbits.codelabs.utils.Sample;
 
 public class DragAndDropSample extends Sample {
@@ -68,14 +65,14 @@ public class DragAndDropSample extends Sample {
 	@Override
 	public void show() {
 		/*
-		 * This line is found in every sample but is not necessary for the sample
-		 * functionality. calls Sample.show() method. That method set the sample to
-		 * receive all touch and key input events. Also prevents the app from be
-		 * closed whenever the user press back button and instead returns to
-		 * main menu.
+		 * This line is found in every sample but is not necessary for the
+		 * sample functionality. calls Sample.show() method. That method set the
+		 * sample to receive all touch and key input events. Also prevents the
+		 * app from be closed whenever the user press back button and instead
+		 * returns to main menu.
 		 */
 		super.show();
-		
+
 		/*
 		 * Create world with a common gravity vector (9.81 m/s2 downwards force)
 		 * and tell world that we want objects to sleep. This last value
@@ -100,7 +97,7 @@ public class DragAndDropSample extends Sample {
 		 * Sample class). In case you are not using Sample class, uncomment this
 		 * line to set input processor to handle events.
 		 */
-		//Gdx.input.setInputProcessor(this);
+		// Gdx.input.setInputProcessor(this);
 
 		/*
 		 * Instantiate the vector that will be used to store click/touch
@@ -108,9 +105,13 @@ public class DragAndDropSample extends Sample {
 		 */
 		touchPosition = new Vector3();
 
-		/* Create all bodies */
-		createBall();
-		Body walls = createWalls();
+		/* Create the ball */
+		Box2DFactory.createCircle(world, BodyType.DynamicBody,
+				new Vector2(0, 0), 1, 2.5f, 0.25f, 0.75f);
+		
+		/* Create the walls */
+		Body walls = Box2DFactory.createWalls(world, camera.viewportWidth,
+				camera.viewportHeight, 1, 1, 1);
 
 		/* Define the mouse joint. We use walls as the first body of the joint */
 		createMouseJointDefinition(walls);
@@ -135,78 +136,6 @@ public class DragAndDropSample extends Sample {
 	public void dispose() {
 		debugRenderer.dispose();
 		world.dispose();
-	}
-
-	/**
-	 * Creates a ball and add it to the world.
-	 */
-	private Body createBall() {
-
-		/*
-		 * Ball body definition. Represents a single point in the world. This
-		 * body will be dynamic because the ball must interact with the
-		 * environment and will be set 6 meters right and 5 meters up from
-		 * viewport center.
-		 */
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.DynamicBody;
-		bodyDef.position.set(0, 0);
-
-		/* Shape definition (the actual shape of the body) */
-		CircleShape ballShape = new CircleShape();
-		ballShape.setRadius(1);
-
-		/*
-		 * Fixture definition. Let us define properties of a body like the
-		 * shape, the density of the body, its friction or its restitution (how
-		 * 'bouncy' a fixture is) in a physics scene.
-		 */
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = ballShape;
-		fixtureDef.density = 2.5f;
-		fixtureDef.friction = 0.25f;
-		fixtureDef.restitution = 0.75f;
-
-		/* Create body and fixture */
-		Body body = world.createBody(bodyDef);
-		body.createFixture(fixtureDef);
-
-		/* Dispose shape once the body is added to the world */
-		ballShape.dispose();
-
-		return body;
-	}
-
-	/**
-	 * Creates ceiling, ground and walls and add them to the world.
-	 */
-	private Body createWalls() {
-
-		/* Walls body definition */
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.StaticBody;
-		bodyDef.position.set(0, 0f);
-
-		/* Shape definition */
-		ChainShape wallsShape = new ChainShape();
-		wallsShape.createChain(new Vector2[] { new Vector2(-9, -5),
-				new Vector2(9, -5), new Vector2(9, 5), new Vector2(-9, 5),
-				new Vector2(-9, -3), new Vector2(-9, -5) });
-
-		/* Fixture definition */
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = wallsShape;
-		fixtureDef.friction = 0.5f;
-		fixtureDef.restitution = 0f;
-
-		/* Create body and fixture */
-		Body body = world.createBody(bodyDef);
-		body.createFixture(fixtureDef);
-
-		/* Dispose shape once the body is added to the world */
-		wallsShape.dispose();
-
-		return body;
 	}
 
 	/**
@@ -296,5 +225,5 @@ public class DragAndDropSample extends Sample {
 
 		return processed;
 	}
-	
+
 }
