@@ -30,7 +30,7 @@ public class Box2DFactory {
 	 * @param friction
 	 *            Fixture friction
 	 * @param restitution
-	 *            Fixcture restitution
+	 *            Fixture restitution
 	 * @return A new Box2D body with box shape
 	 */
 	public static Body createBox(World world, BodyType bodyType,
@@ -143,7 +143,7 @@ public class Box2DFactory {
 	 * @param friction
 	 *            Fixture friction
 	 * @param restitution
-	 *            Fixcture restitution
+	 *            Fixture restitution
 	 * @return A new Box2D body with triangle shape
 	 */
 	public static Body createTriangle(World world, BodyType bodyType,
@@ -213,9 +213,29 @@ public class Box2DFactory {
 				new Vector2(-halfWidth, halfHeight),
 				new Vector2(-halfWidth, -halfHeight) };
 
-		return createChain(world, BodyType.StaticBody, new Vector2(0, 0), vertices, density, 0.5f, 0f);
+		return createChain(world, BodyType.StaticBody, new Vector2(0, 0),
+				vertices, density, 0.5f, 0f);
 	}
 
+	/**
+	 * Create a custom Box2D chain object.
+	 * 
+	 * @param world
+	 *            World where to add the new chain
+	 * @param bodyType
+	 *            Type of body (Dynamic, Kinematic, Static)
+	 * @param position
+	 *            Position of the chain
+	 * @param vertices
+	 *            Vertices of the chain
+	 * @param density
+	 *            Fixture density
+	 * @param friction
+	 *            Fixture friction
+	 * @param restitution
+	 *            Fixture restitution
+	 * @return A new Box2D chain
+	 */
 	public static Body createChain(World world, BodyType bodyType,
 			Vector2 position, Vector2[] vertices, float density,
 			float friction, float restitution) {
