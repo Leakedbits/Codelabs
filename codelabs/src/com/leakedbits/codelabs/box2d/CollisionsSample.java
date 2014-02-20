@@ -10,12 +10,13 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.leakedbits.codelabs.box2d.utils.Box2DFactory;
 import com.leakedbits.codelabs.utils.Sample;
 
-public class SensorsSample extends Sample implements ContactListener {
+public class CollisionsSample extends Sample implements ContactListener {
 
 	/* Use Box2DDebugRenderer, which is a model renderer for debug purposes */
 	private Box2DDebugRenderer debugRenderer;
@@ -26,7 +27,10 @@ public class SensorsSample extends Sample implements ContactListener {
 	/* Define a world to hold all bodies and simulate reactions between them */
 	private World world;
 
-	private boolean ballNearWall;
+	private Body box;
+	private Body walls;
+
+	private boolean ballTouchedWall;
 
 	/* Fields to store previous accelerometer values in each iteration */
 	private float prevAccelX;
@@ -35,8 +39,8 @@ public class SensorsSample extends Sample implements ContactListener {
 	/**
 	 * Main constructor used to update sample name.
 	 */
-	public SensorsSample() {
-		name = "Sensors";
+	public CollisionsSample() {
+		name = "Collisions";
 	}
 
 	@Override
@@ -45,7 +49,7 @@ public class SensorsSample extends Sample implements ContactListener {
 		 * Clear screen with a black background. Use red instead if the ball is
 		 * near the a wall.
 		 */
-		if (ballNearWall) {
+		if (ballTouchedWall) {
 			Gdx.gl.glClearColor(1, 0, 0, 1);
 		} else {
 			Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -81,9 +85,10 @@ public class SensorsSample extends Sample implements ContactListener {
 		/*
 		 * Create world with a common gravity vector (9.81 m/s2 downwards force)
 		 * and tell world that we want objects to sleep. This last value
-		 * conserves CPU usage.
+		 * conserves CPU usage. As we use the accelerometer and the world
+		 * gravity to change bodies positions, we can't let bodies to sleep.
 		 */
-		world = new World(new Vector2(0, -9.81f), true);
+		world = new World(new Vector2(0, -9.81f), false);
 
 		/* Create renderer */
 		debugRenderer = new Box2DDebugRenderer();
@@ -99,24 +104,16 @@ public class SensorsSample extends Sample implements ContactListener {
 
 		/* Create the ball */
 		Box2DFactory.createCircle(world, BodyType.DynamicBody,
-				new Vector2(0, 0), 1, 2.5f, 0.25f, 0.75f);
+				new Vector2(5, 0), 1, 2.5f, 0.25f, 0.75f);
 
-		/* Create the sensor */
-		
-		/*
-		 * * * * *
-		 * * * * * Uso las paredes porque quiero paredes y luego cojo la fixture y la
-		 * * * * * transformo en sensor.
-		 * * * * *
-		 */
-		Body sensor = Box2DFactory.createWalls(world, camera.viewportWidth,
-				camera.viewportHeight, 1.25f, 1.25f, 0);
-		sensor.getFixtureList().first().setSensor(true);
+		/* Create the box */
+		box = Box2DFactory.createBox(world, BodyType.StaticBody, new Vector2(0,
+				0), 0.5f, 0.5f, 1, 0.5f, 0.5f);
 
 		/* Create the walls */
-		Box2DFactory.createWalls(world, camera.viewportWidth,
+		walls = Box2DFactory.createWalls(world, camera.viewportWidth,
 				camera.viewportHeight, 1, 1, 1);
-		
+
 		world.setContactListener(this);
 	}
 
@@ -164,12 +161,26 @@ public class SensorsSample extends Sample implements ContactListener {
 
 	@Override
 	public void beginContact(Contact contact) {
-		ballNearWall = true;
+		Fixture fixtureA = contact.getFixtureA();
+		Fixture fixtureB = contact.getFixtureB();
+
+		/*
+		 * If one of the fixture contacting is an static body, and is the wall,
+		 * set ballTouchedWall to true.
+		 */
+		if (fixtureA.getBody().getType() == BodyType.StaticBody) {
+			ballTouchedWall = fixtureA.getBody().equals(walls);
+		} else if (fixtureB.getBody().getType() == BodyType.StaticBody) {
+			ballTouchedWall = fixtureB.getBody().equals(walls);
+		} else {
+			/* Otherwise, set ballTouchedWall to false */
+			ballTouchedWall = false;
+		}
 	}
 
 	@Override
 	public void endContact(Contact contact) {
-		ballNearWall = false;
+
 	}
 
 	@Override

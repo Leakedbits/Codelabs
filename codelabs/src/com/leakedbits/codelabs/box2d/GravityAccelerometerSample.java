@@ -74,7 +74,8 @@ public class GravityAccelerometerSample extends Sample {
 		/*
 		 * Create world with a common gravity vector (9.81 m/s2 downwards force)
 		 * and tell world that we want objects to sleep. This last value
-		 * conserves CPU usage.
+		 * conserves CPU usage. As we use the accelerometer and the world
+		 * gravity to change bodies positions, we can't let bodies to sleep.
 		 */
 		world = new World(new Vector2(0, -9.81f), true);
 
