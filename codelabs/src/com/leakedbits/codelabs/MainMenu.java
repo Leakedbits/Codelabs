@@ -52,7 +52,7 @@ public class MainMenu implements Screen {
 				* (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth());
 		stage.setViewport(Codelabs.TARGET_WIDTH, computedHeight);
 		stage.addAction(Actions.sequence(Actions.moveBy(0, computedHeight),
-				Actions.delay(0.25f, Actions.moveBy(0, -computedHeight, 1.5f, Interpolation.swingOut))));
+				Actions.delay(0.25f, Actions.moveBy(0, -computedHeight, 1.25f, Interpolation.swingOut))));
 
 		Gdx.input.setInputProcessor(stage);
 

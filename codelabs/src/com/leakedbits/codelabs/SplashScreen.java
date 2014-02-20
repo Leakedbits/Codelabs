@@ -41,19 +41,19 @@ public class SplashScreen implements Screen {
 		/* Set the splash image in the center of the screen */
 		float width = Gdx.graphics.getWidth();
 		float height = Gdx.graphics.getHeight();
-		
+
 		splashImage.setPosition((width - splashImage.getWidth()) / 2,
 				(height - splashImage.getHeight()) / 2);
-		
-		
+
 		/* Fade in the image and then swing it down */
 		splashImage.getColor().a = 0f;
 		splashImage.addAction(Actions.sequence(Actions.fadeIn(1.25f), Actions
-				.delay(2, Actions.moveBy(0, -Gdx.graphics.getHeight(), 1.5f,
+				.delay(2, Actions.moveBy(0,
+						-(height - splashImage.getHeight() / 2), 1.25f,
 						Interpolation.swingIn)), Actions.run(new Runnable() {
 			@Override
 			public void run() {
-				
+
 				/* Show main menu after swing out */
 				((Game) Gdx.app.getApplicationListener())
 						.setScreen(new MainMenu());
