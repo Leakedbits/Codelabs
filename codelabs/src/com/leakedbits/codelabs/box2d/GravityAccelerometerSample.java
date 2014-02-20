@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.leakedbits.codelabs.box2d.utils.Box2DFactory;
 import com.leakedbits.codelabs.utils.Sample;
@@ -100,7 +102,7 @@ public class GravityAccelerometerSample extends Sample {
 
 		/* Create the walls */
 		Box2DFactory.createWalls(world, camera.viewportWidth,
-				camera.viewportHeight, 1, 1, 1);
+				camera.viewportHeight, 1);
 	}
 
 	@Override
@@ -162,9 +164,11 @@ public class GravityAccelerometerSample extends Sample {
 			camera.unproject(unprojectedVector.set(screenX, screenY, 0));
 
 			/* Create a new ball */
-			Box2DFactory.createCircle(world, BodyType.DynamicBody, new Vector2(
-					unprojectedVector.x, unprojectedVector.y), 1, 2.5f,
-					0.25f, 0.75f);
+			Shape shape = Box2DFactory.createCircleShape(1);
+			FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 2.5f,
+					0.25f, 0.75f, false);
+			Box2DFactory.createBody(world, BodyType.DynamicBody, fixtureDef,
+					new Vector2(unprojectedVector.x, unprojectedVector.y));
 		}
 
 		return true;

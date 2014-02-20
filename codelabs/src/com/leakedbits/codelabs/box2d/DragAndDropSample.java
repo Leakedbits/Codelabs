@@ -9,7 +9,9 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
@@ -106,12 +108,15 @@ public class DragAndDropSample extends Sample {
 		touchPosition = new Vector3();
 
 		/* Create the ball */
-		Box2DFactory.createCircle(world, BodyType.DynamicBody,
-				new Vector2(0, 0), 1, 2.5f, 0.25f, 0.75f);
-		
+		Shape shape = Box2DFactory.createCircleShape(1);
+		FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 2.5f, 0.25f,
+				0.75f, false);
+		Box2DFactory.createBody(world, BodyType.DynamicBody, fixtureDef,
+				new Vector2(0, 0));
+
 		/* Create the walls */
 		Body walls = Box2DFactory.createWalls(world, camera.viewportWidth,
-				camera.viewportHeight, 1, 1, 1);
+				camera.viewportHeight, 1);
 
 		/* Define the mouse joint. We use walls as the first body of the joint */
 		createMouseJointDefinition(walls);

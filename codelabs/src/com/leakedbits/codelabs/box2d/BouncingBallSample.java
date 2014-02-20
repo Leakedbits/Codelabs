@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.leakedbits.codelabs.box2d.utils.Box2DFactory;
 import com.leakedbits.codelabs.utils.Sample;
@@ -77,14 +79,18 @@ public class BouncingBallSample extends Sample {
 						.getWidth()));
 
 		/* Create the ball */
-		Box2DFactory.createCircle(world, BodyType.DynamicBody, new Vector2(6, 5), 0.5f, 2.5f, 0.25f, 0.75f);
+		Shape shape = Box2DFactory.createCircleShape(0.5f);
+		FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 2.5f, 0.25f, 0.75f, false);
+		Box2DFactory.createBody(world, BodyType.DynamicBody, fixtureDef, new Vector2(6, 5));
 		
 		/* Create the ramp */
 		Vector2[] rampVertices = new Vector2[] { new Vector2(-2.5f, -1), new Vector2(2.5f, 1) };
-		Box2DFactory.createChain(world, BodyType.StaticBody, new Vector2(6.5f, 0), rampVertices, 0, 0.3f, 0.3f);
+		shape = Box2DFactory.createChainShape(rampVertices);
+		fixtureDef = Box2DFactory.createFixture(shape, 0, 0.3f, 0.3f, false);
+		Box2DFactory.createBody(world, BodyType.StaticBody, fixtureDef, new Vector2(6.5f, 0));
 		
 		/* Create the walls */
-		Box2DFactory.createWalls(world, camera.viewportWidth, camera.viewportHeight, 1, 1, 1);
+		Box2DFactory.createWalls(world, camera.viewportWidth, camera.viewportHeight, 1);
 	}
 
 	@Override

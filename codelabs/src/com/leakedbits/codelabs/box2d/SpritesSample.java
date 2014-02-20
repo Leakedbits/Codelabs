@@ -11,6 +11,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.leakedbits.codelabs.box2d.utils.Box2DFactory;
@@ -141,14 +143,16 @@ public class SpritesSample extends Sample {
 		 */
 		// Gdx.input.setInputProcessor(this);
 
-		/* Create all bodies */
 		/* Create the box */
-		box = Box2DFactory.createBox(world, BodyType.DynamicBody, new Vector2(
-				0, 0), 1.5f, 1.5f, 0.3f, 0.5f, 0.5f);
+		Shape shape = Box2DFactory.createBoxShape(1.5f, 1.5f);
+		FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 0.3f, 0.5f,
+				0.5f, false);
+		box = Box2DFactory.createBody(world, BodyType.DynamicBody, fixtureDef,
+				new Vector2(0, 0));
 
 		/* Create the walls */
 		Box2DFactory.createWalls(world, camera.viewportWidth,
-				camera.viewportHeight, 1, 1, 1);
+				camera.viewportHeight, 1);
 
 		/* Set box texture */
 		sprite = new Sprite(new Texture("data/images/crab.png"));
