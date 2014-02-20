@@ -11,7 +11,9 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.leakedbits.codelabs.box2d.utils.Box2DFactory;
 import com.leakedbits.codelabs.utils.Sample;
@@ -30,6 +32,7 @@ public class CollisionsSample extends Sample implements ContactListener {
 	private Body walls;
 
 	private boolean ballTouchedWall;
+	private boolean ballTouchedBox;
 
 	/* Fields to store previous accelerometer values in each iteration */
 	private float prevAccelX;
@@ -45,11 +48,13 @@ public class CollisionsSample extends Sample implements ContactListener {
 	@Override
 	public void render(float delta) {
 		/*
-		 * Clear screen with a black background. Use red instead if the ball is
-		 * near the a wall.
+		 * Clear screen with a black background. Use red instead if the ball
+		 * touched a wall or blue if touched the box.
 		 */
 		if (ballTouchedWall) {
-			Gdx.gl.glClearColor(1, 0, 0, 1);
+			Gdx.gl.glClearColor(0.6f, 0, 0, 1);
+		} else if (ballTouchedBox) {
+			Gdx.gl.glClearColor(0, 0, 0.6f, 1);
 		} else {
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 		}
@@ -102,16 +107,21 @@ public class CollisionsSample extends Sample implements ContactListener {
 						.getWidth()));
 
 		/* Create the ball */
-		Box2DFactory.createCircle(world, BodyType.DynamicBody,
-				new Vector2(5, 0), 1, 2.5f, 0.25f, 0.75f);
+		Shape shape = Box2DFactory.createCircleShape(1);
+		FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 2.5f, 0.25f,
+				0.75f, false);
+		Box2DFactory.createBody(world, BodyType.DynamicBody, fixtureDef,
+				new Vector2(5, 0));
 
 		/* Create the box */
-		Box2DFactory.createBox(world, BodyType.StaticBody, new Vector2(0,
-				0), 0.5f, 0.5f, 1, 0.5f, 0.5f);
+		shape = Box2DFactory.createBoxShape(0.5f, 0.5f);
+		fixtureDef = Box2DFactory.createFixture(shape, 1, 0.5f, 0.5f, false);
+		Box2DFactory.createBody(world, BodyType.StaticBody, fixtureDef,
+				new Vector2(0, 0));
 
 		/* Create the walls */
 		walls = Box2DFactory.createWalls(world, camera.viewportWidth,
-				camera.viewportHeight, 1, 1, 1);
+				camera.viewportHeight, 1);
 
 		world.setContactListener(this);
 	}
@@ -168,18 +178,27 @@ public class CollisionsSample extends Sample implements ContactListener {
 		 * set ballTouchedWall to true.
 		 */
 		if (fixtureA.getBody().getType() == BodyType.StaticBody) {
-			ballTouchedWall = fixtureA.getBody().equals(walls);
+			if (fixtureA.getBody().equals(walls)) {
+				ballTouchedBox = false;
+				ballTouchedWall = true;
+			} else {
+				ballTouchedBox = true;
+				ballTouchedWall = false;
+			}
 		} else if (fixtureB.getBody().getType() == BodyType.StaticBody) {
-			ballTouchedWall = fixtureB.getBody().equals(walls);
-		} else {
-			/* Otherwise, set ballTouchedWall to false */
-			ballTouchedWall = false;
+			if (fixtureA.getBody().equals(walls)) {
+				ballTouchedBox = false;
+				ballTouchedWall = true;
+			} else {
+				ballTouchedBox = true;
+				ballTouchedWall = false;
+			}
 		}
 	}
 
 	@Override
 	public void endContact(Contact contact) {
-
+		
 	}
 
 	@Override
