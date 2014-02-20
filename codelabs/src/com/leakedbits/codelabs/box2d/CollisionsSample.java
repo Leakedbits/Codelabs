@@ -27,7 +27,6 @@ public class CollisionsSample extends Sample implements ContactListener {
 	/* Define a world to hold all bodies and simulate reactions between them */
 	private World world;
 
-	private Body box;
 	private Body walls;
 
 	private boolean ballTouchedWall;
@@ -107,7 +106,7 @@ public class CollisionsSample extends Sample implements ContactListener {
 				new Vector2(5, 0), 1, 2.5f, 0.25f, 0.75f);
 
 		/* Create the box */
-		box = Box2DFactory.createBox(world, BodyType.StaticBody, new Vector2(0,
+		Box2DFactory.createBox(world, BodyType.StaticBody, new Vector2(0,
 				0), 0.5f, 0.5f, 1, 0.5f, 0.5f);
 
 		/* Create the walls */
