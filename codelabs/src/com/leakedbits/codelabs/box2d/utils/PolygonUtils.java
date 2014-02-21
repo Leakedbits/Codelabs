@@ -3,7 +3,6 @@ package com.leakedbits.codelabs.box2d.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 public class PolygonUtils {
@@ -21,41 +20,38 @@ public class PolygonUtils {
 	public static Vector2 getEdgesIntersection(Vector2 firstEdgeStartPoint,
 			Vector2 firstEdgeEndPoint, Vector2 secondEdgeStartPoint,
 			Vector2 secondEdgeEndPoint) {
-		Vector2 firstDirectionPoint = new Vector2(firstEdgeEndPoint.x
-				- firstEdgeStartPoint.x, firstEdgeEndPoint.y
-				- firstEdgeStartPoint.y);
-		Vector2 secondDirectionPoint = new Vector2(secondEdgeEndPoint.x
-				- secondEdgeStartPoint.x, secondEdgeEndPoint.y
-				- secondEdgeStartPoint.y);
+		Vector2 firstDirectionPoint = new Vector2(firstEdgeStartPoint.x
+				- firstEdgeEndPoint.x, firstEdgeStartPoint.y
+				- firstEdgeEndPoint.y);
+		Vector2 secondDirectionPoint = new Vector2(secondEdgeStartPoint.x
+				- secondEdgeEndPoint.x, secondEdgeStartPoint.y
+				- secondEdgeEndPoint.y);
 
-		/* Dot product of first point with perpendicular vector of second point */
-		float dotPerpFirstEdge = firstEdgeStartPoint.x * firstEdgeEndPoint.y
-				- firstEdgeStartPoint.y * firstEdgeEndPoint.x;
-		float dotPerpSecondEdge = secondEdgeStartPoint.x * secondEdgeEndPoint.y
-				- secondEdgeStartPoint.y * secondEdgeEndPoint.x;
-		float inversedDotPerpDirection = 1 / (firstDirectionPoint.x
-				* secondEdgeEndPoint.y - firstDirectionPoint.x
-				* secondEdgeEndPoint.y);
+		/* Cross product of each edge */
+		float crossFirstEdge = firstEdgeStartPoint.crs(firstEdgeEndPoint);
+		float crossSecondEdge = secondEdgeStartPoint.crs(secondEdgeEndPoint);
+
+		float inversedCrossDirection = 1 / firstDirectionPoint
+				.crs(secondDirectionPoint);
 
 		return new Vector2(
-				(dotPerpFirstEdge * secondDirectionPoint.x - dotPerpSecondEdge
-						* secondDirectionPoint.x)
-						* inversedDotPerpDirection, (dotPerpFirstEdge
-						* secondDirectionPoint.y - dotPerpSecondEdge
-						* secondDirectionPoint.y)
-						* inversedDotPerpDirection);
+				(crossFirstEdge * secondDirectionPoint.x - crossSecondEdge
+						* firstDirectionPoint.x)
+						* inversedCrossDirection, (crossFirstEdge
+						* secondDirectionPoint.y - crossSecondEdge
+						* firstDirectionPoint.y)
+						* inversedCrossDirection);
 	}
 
-	public static List<Vector2> clipFixtures(List<Vector2> subjectPolygon,
+	public static List<Vector2> clipPolygons(List<Vector2> subjectPolygon,
 			List<Vector2> clipPolygon) {
-		List<Vector2> clippedPolygonVertices = new ArrayList<Vector2>(subjectPolygon);
+		List<Vector2> clippedPolygonVertices = new ArrayList<Vector2>(
+				subjectPolygon);
 
 		Vector2 clipEdgeStartPoint = clipPolygon.get(clipPolygon.size() - 1);
 
 		for (Vector2 clipEdgeEndPoint : clipPolygon) {
-			Gdx.app.log("Buoyancy", clippedPolygonVertices.size() + " clipped polygon vertices");
 			if (clippedPolygonVertices.isEmpty()) {
-				Gdx.app.log("Buoyancy", "Ooops, no vertices intersect");
 				break;
 			}
 
@@ -69,17 +65,14 @@ public class PolygonUtils {
 						clipEdgeEndPoint)) {
 					if (!isPointInsideEdge(testEdgeStartPoint,
 							clipEdgeStartPoint, clipEdgeEndPoint)) {
-						Gdx.app.log("Buoyancy", "Adding because second if");
 						clippedPolygonVertices.add(getEdgesIntersection(
 								clipEdgeStartPoint, clipEdgeEndPoint,
 								testEdgeStartPoint, testEdgeEndPoint));
 					}
 
 					clippedPolygonVertices.add(testEdgeEndPoint);
-					Gdx.app.log("Buoyancy", "Adding because first if");
 				} else if (isPointInsideEdge(testEdgeStartPoint,
 						clipEdgeStartPoint, clipEdgeEndPoint)) {
-					Gdx.app.log("Buoyancy", "Adding because third if");
 					clippedPolygonVertices.add(getEdgesIntersection(
 							clipEdgeStartPoint, clipEdgeEndPoint,
 							testEdgeStartPoint, testEdgeEndPoint));
@@ -94,32 +87,30 @@ public class PolygonUtils {
 		return clippedPolygonVertices;
 	}
 
-	public static PolygonProperties computeCentroid(
-			List<Vector2> polygonVertices) {
+	public static PolygonProperties computePolygonProperties(Vector2[] polygon) {
 		PolygonProperties polygonProperties = null;
 
-		int count = polygonVertices.size();
+		int count = polygon.length;
 
 		if (count >= 3) {
 			Vector2 centroid = new Vector2(0, 0);
 			float area = 0;
 
 			/*
-			 * Create a new vector to represent the reference point for forming
-			 * triangles.
+			 * .
 			 */
-			Vector2 refPoint = new Vector2(0, 0);
-
 			float threeInverse = 1 / 3f;
 
 			for (int i = 0; i < count; i++) {
 				/*
-				 * Use refPoint, polygonVertex and thirdTriangleVertex as
-				 * vertices of a triangle.
+				 * Create a new vector to represent the reference point for
+				 * forming triangles. Then use refPoint, polygonVertex and
+				 * thirdTriangleVertex as vertices of a triangle.
 				 */
-				Vector2 polygonVertex = polygonVertices.get(i);
-				Vector2 thirdTriangleVertex = i + 1 < count ? polygonVertices
-						.get(i + 1) : polygonVertices.get(0);
+				Vector2 refPoint = new Vector2(0, 0);
+				Vector2 polygonVertex = polygon[i];
+				Vector2 thirdTriangleVertex = i + 1 < count ? polygon[i + 1]
+						: polygon[0];
 
 				Vector2 firstDirectionVector = polygonVertex.sub(refPoint);
 				Vector2 secondDirectionVector = thirdTriangleVertex
