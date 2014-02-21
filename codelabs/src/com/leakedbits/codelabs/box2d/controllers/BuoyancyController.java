@@ -1,117 +1,150 @@
 package com.leakedbits.codelabs.box2d.controllers;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.leakedbits.codelabs.box2d.utils.PolygonProperties;
+import com.leakedbits.codelabs.box2d.utils.PolygonUtils;
 
 public class BuoyancyController {
 
-	/* A close to zero float epsilon value */
-	public static final float EPSILON = 1.1920928955078125E-7f;
+	private Fixture fluidSensor;
+	private List<Vector2> fluidVertices;
+	private Set<Fixture> fixtures;
+	private World world;
 
-	public Body sensor;
-	public OrthographicCamera camera;
-	public Set<Body> bodies;
-	public World world;
+	public boolean isFluidFixed = true;
+	public float fluidDrag = 0;
+	public float fluidLift = 0;
+	public float maxFluidDrag = 0;
+	public float maxFluidLift = 0;
 
-	public Vector2 fluidVelocity;
-	public float fluidAngularDrag;
-	public float fluidDensity;
-	public float fluidLinearDrag;
-
-	public BuoyancyController(OrthographicCamera camera, World world) {
-		this.camera = camera;
+	public BuoyancyController(World world, Fixture fluidSensor) {
 		this.world = world;
-		this.bodies = new HashSet<Body>();
+		this.fluidSensor = fluidSensor;
+		fluidVertices = getFixtureVertices(fluidSensor);
+
+		fixtures = new HashSet<Fixture>();
 	}
 
-	public void step(float timeStep) {
-		if (!bodies.isEmpty()) {
-			Vector2 gravity = world.getGravity();
+	public void step() {
+		for (Fixture fixture : fixtures) {
+			if (fixture.getBody().isAwake()) {
 
-			for (Body body : bodies) {
-				if (body.isAwake()) {
-					float submergedArea = 0;
-					float submergedMass = 0;
-					Vector2 areaCenter = new Vector2(0,0);
-					Vector2 massCenter = new Vector2(0,0);
+				/* Create clipPolygon */
+				List<Vector2> clipPolygon = getFixtureVertices(fixture);
 
-					for (Fixture fixture : body.getFixtureList()) {
-						Vector2 summergedCenter = new Vector2(0,0);
-						Shape shape = fixture.getShape();
-						submergedArea += calculateSubmergedArea(body);
-
-						areaCenter.x += submergedArea * summergedCenter.x;
-						areaCenter.y += submergedArea * summergedCenter.y;
-
-						float shapeDensity = fixture.getDensity();
-						submergedMass = submergedArea * shapeDensity;
-						massCenter.x +=  submergedArea * summergedCenter.x * shapeDensity;
-						massCenter.y +=  submergedArea * summergedCenter.y * shapeDensity;
-					}
-
-					areaCenter.x/=submergedArea;
-					areaCenter.y/=submergedArea;
-
-					massCenter.x/=submergedMass;
-					massCenter.y/=submergedMass;
-
-					if(submergedArea >= EPSILON) {
-						Vector3 unprojectVector = new Vector3(areaCenter.x, areaCenter.y, 0);
-						camera.unproject(unprojectVector);
-
-						areaCenter.x = unprojectVector.x;
-						areaCenter.y = unprojectVector.y;
-
-						unprojectVector = new Vector3(massCenter.x, massCenter.y, 0);
-						camera.unproject(unprojectVector);
-
-						massCenter.x = unprojectVector.x;
-						massCenter.y = unprojectVector.y;
-
-						/* Buoyancy force */
-						Vector2 buoyancyForce = gravity.scl(-fluidDensity * submergedArea);
-						Gdx.app.log("Buoyancy", buoyancyForce.x + ", " + buoyancyForce.y);
-						body.applyForce(buoyancyForce, massCenter, true);
-
-						/* Linear drag */
-						Vector2 dragForce = body.getLinearVelocityFromWorldPoint(areaCenter).sub(fluidVelocity);
-						dragForce = dragForce.scl(-fluidLinearDrag*submergedArea);
-						body.applyForce(dragForce, areaCenter, true);
-
-						/* Angular drag */
-						body.applyTorque(-body.getInertia()/body.getMass()*submergedArea*body.getAngularVelocity()*fluidAngularDrag, true);
-					}
+				/* Create subjectPolygon */
+				List<Vector2> subjectPolygon;
+				if (isFluidFixed) {
+					subjectPolygon = fluidVertices;
 				} else {
-					continue;
+					subjectPolygon = getFixtureVertices(fluidSensor);
+				}
+
+				/* Get intersection polygon */
+				List<Vector2> clippedPolygon = PolygonUtils.clipPolygons(
+						subjectPolygon, clipPolygon);
+
+				if (!clippedPolygon.isEmpty()) {
+					applyForces(fixture, clippedPolygon.toArray(new Vector2[0]));
 				}
 			}
 		}
 	}
 
-	public void addBody(Body body) {
-		bodies.add(body);
+	private void applyForces(Fixture fixture, Vector2[] clippedPolygon) {
+		PolygonProperties polygonProperties = PolygonUtils
+				.computePolygonProperties(clippedPolygon);
+
+		/* Get fixture body */
+		Body body = fixture.getBody();
+
+		/* Apply buoyancy force */
+		float displacedMass = fluidSensor.getDensity()
+				* polygonProperties.getArea();
+		Vector2 gravity = world.getGravity();
+		Vector2 buoyancyForce = new Vector2(-gravity.x * displacedMass,
+				-gravity.y * displacedMass);
+		body.applyForce(buoyancyForce, polygonProperties.getCentroid(), true);
+
+		/* Apply drag and lift forces */
+		for (int i = 0; i < clippedPolygon.length - 1; i++) {
+
+			/* Apply drag force */
+			
+			/* End points and mid point of the edge */
+			Vector2 firstPoint = clippedPolygon[i];
+			Vector2 secondPoint = clippedPolygon[i + 1];
+			Vector2 midPoint = secondPoint.sub(firstPoint);
+
+			/*
+			 * Find relative velocity between the object and the fluid at edge
+			 * mid point.
+			 */
+			Vector2 velocityDirection = body.getLinearVelocityFromWorldPoint(midPoint);
+			float velocity = velocityDirection.cpy().nor().len();
+			
+			float edgeLength = midPoint.cpy().nor().len();
+			Vector2 normal = new Vector2(-midPoint.y, -midPoint.x);
+			
+			float dragDot = normal.dot(velocityDirection);
+			if (dragDot < 0) {
+				continue;
+			}
+			
+			float drag = dragDot * fluidDrag * edgeLength * fluidSensor.getDensity()
+					* velocity * velocity;
+			drag = Math.min(drag, maxFluidDrag);
+			Vector2 dragForce = velocityDirection.cpy().scl(-drag);
+			body.applyForce(dragForce, midPoint, true);
+			
+			/* Apply lift force */
+			float liftDot = midPoint.dot(velocityDirection);
+			float lift = dragDot * liftDot * fluidLift * edgeLength
+					* fluidSensor.getDensity() * velocity * velocity;
+			lift = Math.min(maxFluidLift, lift);
+			Vector2 liftDirection = new Vector2(velocityDirection.y, velocityDirection.x);
+			Vector2 liftForce = liftDirection.scl(lift);
+			body.applyForce(liftForce, midPoint, true);
+		}
 	}
 
-	public void removeBody(Body body) {
-		bodies.remove(body);
+	public void addBody(Fixture fixture) {
+		try {
+			PolygonShape polygon = (PolygonShape) fixture.getShape();
+			if (polygon.getVertexCount() > 2) {
+				fixtures.add(fixture);
+			}
+		} catch (ClassCastException e) {
+			Gdx.app.debug("BuoyancyController",
+					"Fixture shape is not an instance of PolygonShape.");
+		}
 	}
 
-	public float calculateSubmergedArea(Body body) {
-		float area = 0;
-		Fixture sensor = this.sensor.getFixtureList().get(0);
-		float submergedDistance = -2 - body.getWorldCenter().y;
+	public void removeBody(Fixture fixture) {
+		fixtures.remove(fixture);
+	}
 
-		area = Math.min(4f,submergedDistance * 2);
-		Gdx.app.log("Area", area+"");
-		return area;
+	private List<Vector2> getFixtureVertices(Fixture fixture) {
+		PolygonShape polygon = (PolygonShape) fixture.getShape();
+		int verticesCount = polygon.getVertexCount();
+
+		List<Vector2> vertices = new ArrayList<Vector2>(verticesCount);
+		for (int i = 0; i < verticesCount; i++) {
+			Vector2 vertex = new Vector2();
+			polygon.getVertex(i, vertex);
+			vertices.add(new Vector2(fixture.getBody().getWorldPoint(vertex)));
+		}
+
+		return vertices;
 	}
 }

@@ -92,13 +92,13 @@ public class ImpulsesSample extends Sample {
 		 */
 		// Gdx.input.setInputProcessor(this);
 
-		/* Create the box */
+		
+/* Create the box */
 		Shape shape = Box2DFactory.createBoxShape(1.5f, 1.5f);
 		FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 0.3f, 0.5f,
 				0.5f, false);
 		box = Box2DFactory.createBody(world, BodyType.DynamicBody, fixtureDef,
 				new Vector2(0, 0));
-
 		/* Create the walls */
 		Box2DFactory.createWalls(world, camera.viewportWidth,
 				camera.viewportHeight, 1);
