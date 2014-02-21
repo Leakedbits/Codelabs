@@ -21,7 +21,7 @@ import com.leakedbits.codelabs.box2d.utils.Box2DFactory;
 import com.leakedbits.codelabs.utils.Sample;
 
 public class BuoyancySample extends Sample implements ContactListener {
-	
+
 	/* Max number of bodies to be spawned */
 	private static final int MAX_SPAWNED_BODIES = 20;
 
@@ -35,7 +35,7 @@ public class BuoyancySample extends Sample implements ContactListener {
 	private World world;
 
 	private BuoyancyController buoyancyController;
-	
+
 	/* Counter to know how many bodies have been spawned */
 	private int spawnedBodies;
 
@@ -100,11 +100,14 @@ public class BuoyancySample extends Sample implements ContactListener {
 				camera.viewportHeight, 1);
 
 		/* Create the water */
-		Shape shape = Box2DFactory.createBoxShape((camera.viewportWidth / 2 - 1),
+		Shape shape = Box2DFactory.createBoxShape(
+				(camera.viewportWidth / 2 - 1),
 				(camera.viewportHeight / 2 - 2) / 2);
-		FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 1, 0.1f, 0, true);
+		FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 1, 0.1f, 0,
+				true);
 		Body water = Box2DFactory.createBody(world, BodyType.StaticBody,
-				fixtureDef, new Vector2(0, -(camera.viewportHeight / 2 - 1) / 2 - 0.5f));
+				fixtureDef, new Vector2(0,
+						-(camera.viewportHeight / 2 - 1) / 2 - 0.5f));
 
 		buoyancyController = new BuoyancyController(world, water
 				.getFixtureList().first());
@@ -137,7 +140,7 @@ public class BuoyancySample extends Sample implements ContactListener {
 		debugRenderer.dispose();
 		world.dispose();
 	}
-	
+
 	@Override
 	public void beginContact(Contact contact) {
 		Fixture fixtureA = contact.getFixtureA();
@@ -179,7 +182,7 @@ public class BuoyancySample extends Sample implements ContactListener {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
@@ -192,11 +195,22 @@ public class BuoyancySample extends Sample implements ContactListener {
 			camera.unproject(unprojectedVector.set(screenX, screenY, 0));
 
 			/* Create a new box */
-			Shape shape = Box2DFactory.createBoxShape(1, 1);
-			FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 0.5f, 0.5f,
-					0.5f, false);
-			Box2DFactory.createBody(world, BodyType.DynamicBody, fixtureDef,
-					new Vector2(unprojectedVector.x, unprojectedVector.y));
+			if (Math.random() >= 0.5) {
+				Shape shape = Box2DFactory.createBoxShape(1, 1);
+				FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 0.5f,
+						0.5f, 0.5f, false);
+				Box2DFactory.createBody(world, BodyType.DynamicBody,
+						fixtureDef, new Vector2(unprojectedVector.x,
+								unprojectedVector.y));
+			} else {
+				/* Create a new triangle */
+				Shape shape = Box2DFactory.createTriangleShape(1, 1);
+				FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 0.5f,
+						0.5f, 0.5f, false);
+				Box2DFactory.createBody(world, BodyType.DynamicBody,
+						fixtureDef, new Vector2(unprojectedVector.x,
+								unprojectedVector.y));
+			}
 		}
 
 		return true;

@@ -22,10 +22,10 @@ public class BuoyancyController {
 	private World world;
 
 	public boolean isFluidFixed = true;
-	public float fluidDrag = 0;
-	public float fluidLift = 0;
-	public float maxFluidDrag = 0;
-	public float maxFluidLift = 0;
+	public float fluidDrag = 0.25f;
+	public float fluidLift = 0.25f;
+	public float maxFluidDrag = 2000;
+	public float maxFluidLift = 500;
 
 	public BuoyancyController(World world, Fixture fluidSensor) {
 		this.world = world;
@@ -68,6 +68,9 @@ public class BuoyancyController {
 		/* Get fixture body */
 		Body body = fixture.getBody();
 
+		/* Get fluid density */
+		float density = fluidSensor.getDensity();
+
 		/* Apply buoyancy force */
 		float displacedMass = fluidSensor.getDensity()
 				* polygonProperties.getArea();
@@ -77,44 +80,53 @@ public class BuoyancyController {
 		body.applyForce(buoyancyForce, polygonProperties.getCentroid(), true);
 
 		/* Apply drag and lift forces */
-		for (int i = 0; i < clippedPolygon.length - 1; i++) {
+		int polygonVertices = clippedPolygon.length;
+		for (int i = 0; i < polygonVertices; i++) {
 
 			/* Apply drag force */
-			
+
 			/* End points and mid point of the edge */
 			Vector2 firstPoint = clippedPolygon[i];
-			Vector2 secondPoint = clippedPolygon[i + 1];
-			Vector2 midPoint = secondPoint.sub(firstPoint);
+			Vector2 secondPoint = clippedPolygon[(i + 1) % polygonVertices];
+			Vector2 midPoint = firstPoint.cpy().add(secondPoint).scl(0.5f);
 
 			/*
 			 * Find relative velocity between the object and the fluid at edge
 			 * mid point.
 			 */
-			Vector2 velocityDirection = body.getLinearVelocityFromWorldPoint(midPoint);
+			Vector2 velocityDirection = body
+					.getLinearVelocityFromWorldPoint(midPoint);
 			float velocity = velocityDirection.cpy().nor().len();
-			
-			float edgeLength = midPoint.cpy().nor().len();
-			Vector2 normal = new Vector2(-midPoint.y, -midPoint.x);
-			
+
+			Vector2 edge = secondPoint.cpy().sub(firstPoint);
+			float edgeLength = edge.cpy().nor().len();
+			Vector2 normal = new Vector2(-midPoint.y, midPoint.x);
+
 			float dragDot = normal.dot(velocityDirection);
-			if (dragDot < 0) {
-				continue;
+			if (dragDot >= 0) {
+				/*
+				 * Normal don't point backwards. This is a leading edge. Store
+				 * the result of multiply edgeLength, density and velocity
+				 * squared
+				 */
+				float tempProduct = edgeLength * density * velocity * velocity;
+
+				float drag = dragDot * fluidDrag * tempProduct;
+				drag = Math.min(drag, maxFluidDrag);
+				Vector2 dragForce = velocityDirection.cpy().scl(-drag);
+				body.applyForce(dragForce, midPoint, true);
+				
+Gdx.app.log("Dot", "" + (dragDot > 30? dragDot : 0));
+
+				/* Apply lift force */
+				float liftDot = edge.dot(velocityDirection);
+				float lift = liftDot * fluidLift * tempProduct;
+				lift = Math.min(maxFluidLift, lift);
+				Vector2 liftDirection = new Vector2(velocityDirection.y,
+						-velocityDirection.x);
+				Vector2 liftForce = liftDirection.scl(lift);
+				body.applyForce(liftForce, midPoint, true);
 			}
-			
-			float drag = dragDot * fluidDrag * edgeLength * fluidSensor.getDensity()
-					* velocity * velocity;
-			drag = Math.min(drag, maxFluidDrag);
-			Vector2 dragForce = velocityDirection.cpy().scl(-drag);
-			body.applyForce(dragForce, midPoint, true);
-			
-			/* Apply lift force */
-			float liftDot = midPoint.dot(velocityDirection);
-			float lift = dragDot * liftDot * fluidLift * edgeLength
-					* fluidSensor.getDensity() * velocity * velocity;
-			lift = Math.min(maxFluidLift, lift);
-			Vector2 liftDirection = new Vector2(velocityDirection.y, velocityDirection.x);
-			Vector2 liftForce = liftDirection.scl(lift);
-			body.applyForce(liftForce, midPoint, true);
 		}
 	}
 
