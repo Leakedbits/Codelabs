@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -20,6 +21,9 @@ import com.leakedbits.codelabs.box2d.utils.Box2DFactory;
 import com.leakedbits.codelabs.utils.Sample;
 
 public class BuoyancySample extends Sample implements ContactListener {
+	
+	/* Max number of bodies to be spawned */
+	private static final int MAX_SPAWNED_BODIES = 20;
 
 	/* Use Box2DDebugRenderer, which is a model renderer for debug purposes */
 	private Box2DDebugRenderer debugRenderer;
@@ -31,6 +35,9 @@ public class BuoyancySample extends Sample implements ContactListener {
 	private World world;
 
 	private BuoyancyController buoyancyController;
+	
+	/* Counter to know how many bodies have been spawned */
+	private int spawnedBodies;
 
 	public BuoyancySample() {
 		name = "Buoyancy";
@@ -89,20 +96,13 @@ public class BuoyancySample extends Sample implements ContactListener {
 		 */
 		// Gdx.input.setInputProcessor(this);
 
-		/* Create the box */
-		Shape shape = Box2DFactory.createBoxShape(1, 1);
-		FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 0.5f, 0.5f,
-				0.5f, false);
-		Box2DFactory.createBody(world, BodyType.DynamicBody, fixtureDef,
-				new Vector2(0, 2));
-
 		Box2DFactory.createWalls(world, camera.viewportWidth,
 				camera.viewportHeight, 1);
 
 		/* Create the water */
-		shape = Box2DFactory.createBoxShape((camera.viewportWidth / 2 - 1),
+		Shape shape = Box2DFactory.createBoxShape((camera.viewportWidth / 2 - 1),
 				(camera.viewportHeight / 2 - 2) / 2);
-		fixtureDef = Box2DFactory.createFixture(shape, 1, 0.1f, 0, true);
+		FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 1, 0.1f, 0, true);
 		Body water = Box2DFactory.createBody(world, BodyType.StaticBody,
 				fixtureDef, new Vector2(0, -(camera.viewportHeight / 2 - 1) / 2 - 0.5f));
 
@@ -178,6 +178,28 @@ public class BuoyancySample extends Sample implements ContactListener {
 	public void postSolve(Contact contact, ContactImpulse impulse) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
+		/* Checks whether the max amount of balls were spawned */
+		if (spawnedBodies < MAX_SPAWNED_BODIES) {
+			spawnedBodies++;
+
+			/* Translate camera point to world point */
+			Vector3 unprojectedVector = new Vector3();
+			camera.unproject(unprojectedVector.set(screenX, screenY, 0));
+
+			/* Create a new box */
+			Shape shape = Box2DFactory.createBoxShape(1, 1);
+			FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 0.5f, 0.5f,
+					0.5f, false);
+			Box2DFactory.createBody(world, BodyType.DynamicBody, fixtureDef,
+					new Vector2(unprojectedVector.x, unprojectedVector.y));
+		}
+
+		return true;
 	}
 
 }
