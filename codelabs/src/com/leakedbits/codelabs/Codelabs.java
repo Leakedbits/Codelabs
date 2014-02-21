@@ -1,6 +1,7 @@
 package com.leakedbits.codelabs;
 
 import com.badlogic.gdx.Game;
+import com.leakedbits.codelabs.box2d.BuoyancySample;
 
 public class Codelabs extends Game {
 
@@ -11,7 +12,7 @@ public class Codelabs extends Game {
 			
 	@Override
 	public void create() {
-		setScreen(new SplashScreen());
+		setScreen(new BuoyancySample());
 	}
 	
 }

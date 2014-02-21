@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.leakedbits.codelabs.box2d.BouncingBallSample;
+import com.leakedbits.codelabs.box2d.BuoyancySample;
 import com.leakedbits.codelabs.box2d.DragAndDropSample;
 import com.leakedbits.codelabs.box2d.GravityAccelerometerSample;
 import com.leakedbits.codelabs.box2d.ImpulsesSample;
@@ -24,7 +25,8 @@ public class Box2DSamples {
 					ImpulsesSample.class,
 					SpritesSample.class,
 					GravityAccelerometerSample.class,
-					CollisionsSample.class
+					CollisionsSample.class,
+					BuoyancySample.class
 			)
 	);
 
