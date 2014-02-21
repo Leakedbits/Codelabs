@@ -69,6 +69,7 @@ public class Box2DFactory {
 			float friction, float restitution, boolean isSensor) {
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;
+		fixtureDef.isSensor = isSensor;
 		fixtureDef.density = density;
 		fixtureDef.friction = friction;
 		fixtureDef.restitution = restitution;
