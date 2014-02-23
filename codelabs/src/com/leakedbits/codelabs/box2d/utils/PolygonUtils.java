@@ -96,9 +96,7 @@ public class PolygonUtils {
 			Vector2 centroid = new Vector2(0, 0);
 			float area = 0;
 
-			/*
-			 * .
-			 */
+			Vector2 refPoint = new Vector2(0, 0);
 			float threeInverse = 1 / 3f;
 
 			for (int i = 0; i < count; i++) {
@@ -107,7 +105,7 @@ public class PolygonUtils {
 				 * forming triangles. Then use refPoint, polygonVertex and
 				 * thirdTriangleVertex as vertices of a triangle.
 				 */
-				Vector2 refPoint = new Vector2(0, 0);
+				refPoint.set(0, 0);
 				Vector2 polygonVertex = polygon[i];
 				Vector2 thirdTriangleVertex = i + 1 < count ? polygon[i + 1]
 						: polygon[0];
