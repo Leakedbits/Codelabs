@@ -109,12 +109,6 @@ public class BuoyancySample extends Sample implements ContactListener {
 				fixtureDef, new Vector2(0,
 						-(camera.viewportHeight / 2 - 1) / 2 - 0.5f));
 
-		shape = Box2DFactory.createBoxShape(1, 1);
-		fixtureDef = Box2DFactory.createFixture(shape, 0.5f,
-				0.5f, 0.5f, false);
-		Box2DFactory.createBody(world, BodyType.DynamicBody,
-				fixtureDef, new Vector2(0, 3));
-		
 		buoyancyController = new BuoyancyController(world, water
 				.getFixtureList().first());
 		buoyancyController.isFluidFixed = true;
@@ -197,22 +191,22 @@ public class BuoyancySample extends Sample implements ContactListener {
 			camera.unproject(unprojectedVector.set(screenX, screenY, 0));
 
 			/* Create a new box */
-//			if (Math.random() >= 0.5) {
+			if (Math.random() >= 0.5) {
 				Shape shape = Box2DFactory.createBoxShape(1, 1);
 				FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 0.5f,
 						0.5f, 0.5f, false);
 				Box2DFactory.createBody(world, BodyType.DynamicBody,
 						fixtureDef, new Vector2(unprojectedVector.x,
 								unprojectedVector.y));
-//			} else {
-//				/* Create a new triangle */
-//				Shape shape = Box2DFactory.createTriangleShape(1, 1);
-//				FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 0.5f,
-//						0.5f, 0.5f, false);
-//				Box2DFactory.createBody(world, BodyType.DynamicBody,
-//						fixtureDef, new Vector2(unprojectedVector.x,
-//								unprojectedVector.y));
-//			}
+			} else {
+				/* Create a new triangle */
+				Shape shape = Box2DFactory.createTriangleShape(1, 1);
+				FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 0.5f,
+						0.5f, 0.5f, false);
+				Box2DFactory.createBody(world, BodyType.DynamicBody,
+						fixtureDef, new Vector2(unprojectedVector.x,
+								unprojectedVector.y));
+			}
 		}
 
 		return true;

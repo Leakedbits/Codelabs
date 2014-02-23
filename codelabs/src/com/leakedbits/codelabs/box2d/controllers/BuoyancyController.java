@@ -99,35 +99,15 @@ public class BuoyancyController {
 			Vector2 velocityDirection = new Vector2(fixtureBody
 					.getLinearVelocityFromWorldPoint(midPoint)
 					.sub(fluidBody.getLinearVelocityFromWorldPoint(midPoint)));
-//			float velocity = velocityDirection.cpy().nor().len();
-			
 			float velocity = velocityDirection.len();
-            if (velocity < 1.19209290e-07)
-            {
-            	velocity = 0.0f;
-            }
-            
-            float invLength = 1.0f / velocity;
-            velocityDirection.x *= invLength;
-            velocityDirection.y *= invLength;
+			velocityDirection.nor();
             
 			Vector2 edge = secondPoint.cpy().sub(firstPoint);
-//			float edgeLength = edge.cpy().nor().len();
 			float edgeLength = edge.len();
-            if (edgeLength < 1.1920928955078125E-7f)
-            {
-            	edgeLength = 0.0f;
-            }
-            
-            invLength = 1.0f / edgeLength;
-            edge.x *= invLength;
-            edge.y *= invLength;
-            
-            
-            
-			Vector2 normal = new Vector2(edge.y, -edge.x);
-		
-			float dragDot = normal.dot(velocityDirection);
+			edge.nor();
+			
+			Vector2 normal = new Vector2(edge.y, -edge.x);		
+			float dragDot = normal.dot(velocityDirection); 
 			
 			if (dragDot >= 0) {
 				
@@ -141,7 +121,6 @@ public class BuoyancyController {
 				float drag = dragDot * fluidDrag * tempProduct;
 				drag = Math.min(drag, maxFluidDrag);
 				Vector2 dragForce = velocityDirection.cpy().scl(-drag);
-				Gdx.app.log("Drag force", "" + dragForce);
 				fixtureBody.applyForce(dragForce, midPoint, true);
 
 				/* Apply lift force */
@@ -154,7 +133,6 @@ public class BuoyancyController {
 				fixtureBody.applyForce(liftForce, midPoint, true);
 			}
 		}
-		Gdx.app.log("","");
 	}
 
 	public void addBody(Fixture fixture) {
