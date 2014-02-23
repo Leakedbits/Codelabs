@@ -109,9 +109,9 @@ public class BuoyancySample extends Sample implements ContactListener {
 				fixtureDef, new Vector2(0,
 						-(camera.viewportHeight / 2 - 1) / 2 - 0.5f));
 
+		/* Create a buoyancy controller using the previous body as a fluid sensor */
 		buoyancyController = new BuoyancyController(world, water
 				.getFixtureList().first());
-		buoyancyController.isFluidFixed = true;
 
 		world.setContactListener(this);
 	}
@@ -169,13 +169,11 @@ public class BuoyancySample extends Sample implements ContactListener {
 
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
-		// TODO Auto-generated method stub
 
 	}
 
