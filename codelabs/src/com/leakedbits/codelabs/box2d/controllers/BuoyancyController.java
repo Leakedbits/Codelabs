@@ -24,6 +24,7 @@ public class BuoyancyController {
 	public boolean isFluidFixed = true;
 	public float fluidDrag = 0.25f;
 	public float fluidLift = 0.25f;
+	public float linearDrag = 0;
 	public float maxFluidDrag = 2000;
 	public float maxFluidLift = 500;
 
@@ -81,6 +82,12 @@ public class BuoyancyController {
 		fixtureBody.applyForce(buoyancyForce, polygonProperties.getCentroid(),
 				true);
 
+		/* Linear drag force */
+		if (linearDrag != 0) {
+			fixtureBody.applyForce(gravity.rotate90(1).nor().scl(linearDrag),
+					polygonProperties.getCentroid(), true);
+		}
+
 		/* Apply drag and lift forces */
 		int polygonVertices = clippedPolygon.length;
 		for (int i = 0; i < polygonVertices; i++) {
@@ -101,16 +108,16 @@ public class BuoyancyController {
 					.sub(fluidBody.getLinearVelocityFromWorldPoint(midPoint)));
 			float velocity = velocityDirection.len();
 			velocityDirection.nor();
-            
+
 			Vector2 edge = secondPoint.cpy().sub(firstPoint);
 			float edgeLength = edge.len();
 			edge.nor();
-			
-			Vector2 normal = new Vector2(edge.y, -edge.x);		
-			float dragDot = normal.dot(velocityDirection); 
-			
+
+			Vector2 normal = new Vector2(edge.y, -edge.x);
+			float dragDot = normal.dot(velocityDirection);
+
 			if (dragDot >= 0) {
-				
+
 				/*
 				 * Normal don't point backwards. This is a leading edge. Store
 				 * the result of multiply edgeLength, density and velocity
