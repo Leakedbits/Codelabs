@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.leakedbits.codelabs.box2d.utils.PolygonProperties;
-import com.leakedbits.codelabs.box2d.utils.PolygonUtils;
+import com.leakedbits.codelabs.utils.PolygonIntersector;
 
 public class BuoyancyController {
 
@@ -52,7 +52,7 @@ public class BuoyancyController {
 				}
 
 				/* Get intersection polygon */
-				List<Vector2> clippedPolygon = PolygonUtils.clipPolygons(
+				List<Vector2> clippedPolygon = PolygonIntersector.clipPolygons(
 						subjectPolygon, clipPolygon);
 
 				if (!clippedPolygon.isEmpty()) {
@@ -63,7 +63,7 @@ public class BuoyancyController {
 	}
 
 	private void applyForces(Fixture fixture, Vector2[] clippedPolygon) {
-		PolygonProperties polygonProperties = PolygonUtils
+		PolygonProperties polygonProperties = PolygonIntersector
 				.computePolygonProperties(clippedPolygon);
 
 		/* Get fixtures bodies */
