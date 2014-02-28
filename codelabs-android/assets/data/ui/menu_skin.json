@@ -4,20 +4,22 @@
 		"white": { "r": 0, "g": 0, "b": 0, "a": 1 }
 	},
 	"com.badlogic.gdx.graphics.g2d.BitmapFont": {
-		"white": { "file": "data/fonts/consolas_white.fnt" }
+		"righteous-12": { "file": "data/fonts/Righteous-12.fnt" },
+		"righteous-16": { "file": "data/fonts/Righteous-16.fnt" },
+		"righteous-24": { "file": "data/fonts/Righteous-24.fnt" }
 	},	
 	"com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
 		"blue": {
 			"up": "btn_up_blue",
 			"down": "btn_down_blue",
 			"over": "btn_over_blue",
-			"font": white 
+			"font": righteous-24 
 		},
 		"red": {
 			"up": "btn_up_red",
 			"down": "btn_down_red",
 			"over": "btn_over_red",
-			"font": white 
+			"font": righteous-24
 		}
 	}
 }
