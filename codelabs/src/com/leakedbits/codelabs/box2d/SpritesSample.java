@@ -100,11 +100,6 @@ public class SpritesSample extends Sample {
 	}
 
 	@Override
-	public void resize(int width, int height) {
-
-	}
-
-	@Override
 	public void show() {
 		/*
 		 * This line is found in every sample but is not necessary for the
@@ -175,28 +170,6 @@ public class SpritesSample extends Sample {
 
 		/* Instantiate the array of bodies that will be used during render step */
 		worldBodies = new Array<Body>();
-	}
-
-	@Override
-	public void hide() {
-
-	}
-
-	@Override
-	public void pause() {
-
-	}
-
-	@Override
-	public void resume() {
-
-	}
-
-	@Override
-	public void dispose() {
-		sprite.getTexture().dispose();
-		debugRenderer.dispose();
-		world.dispose();
 	}
 
 	/*

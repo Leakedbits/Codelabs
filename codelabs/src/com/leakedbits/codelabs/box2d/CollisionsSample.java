@@ -70,10 +70,6 @@ public class CollisionsSample extends Sample implements ContactListener {
 		world.step(1 / 60f, 6, 2);
 	}
 
-	@Override
-	public void resize(int width, int height) {
-
-	}
 
 	@Override
 	public void show() {
@@ -124,21 +120,6 @@ public class CollisionsSample extends Sample implements ContactListener {
 				camera.viewportHeight, 1);
 
 		world.setContactListener(this);
-	}
-
-	@Override
-	public void hide() {
-
-	}
-
-	@Override
-	public void pause() {
-
-	}
-
-	@Override
-	public void resume() {
-
 	}
 
 	@Override

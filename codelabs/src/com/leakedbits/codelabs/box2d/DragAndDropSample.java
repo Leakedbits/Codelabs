@@ -60,11 +60,6 @@ public class DragAndDropSample extends Sample {
 	}
 
 	@Override
-	public void resize(int width, int height) {
-
-	}
-
-	@Override
 	public void show() {
 		/*
 		 * This line is found in every sample but is not necessary for the
@@ -121,22 +116,7 @@ public class DragAndDropSample extends Sample {
 		/* Define the mouse joint. We use walls as the first body of the joint */
 		createMouseJointDefinition(walls);
 	}
-
-	@Override
-	public void hide() {
-
-	}
-
-	@Override
-	public void pause() {
-
-	}
-
-	@Override
-	public void resume() {
-
-	}
-
+	
 	@Override
 	public void dispose() {
 		debugRenderer.dispose();

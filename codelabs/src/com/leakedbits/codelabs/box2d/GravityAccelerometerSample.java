@@ -58,11 +58,6 @@ public class GravityAccelerometerSample extends Sample {
 	}
 
 	@Override
-	public void resize(int width, int height) {
-
-	}
-
-	@Override
 	public void show() {
 		/*
 		 * This line is found in every sample but is not necessary for the
@@ -103,21 +98,6 @@ public class GravityAccelerometerSample extends Sample {
 		/* Create the walls */
 		Box2DFactory.createWalls(world, camera.viewportWidth,
 				camera.viewportHeight, 1);
-	}
-
-	@Override
-	public void hide() {
-
-	}
-
-	@Override
-	public void pause() {
-
-	}
-
-	@Override
-	public void resume() {
-
 	}
 
 	@Override

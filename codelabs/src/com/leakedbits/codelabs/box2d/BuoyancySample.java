@@ -117,21 +117,6 @@ public class BuoyancySample extends Sample implements ContactListener {
 	}
 
 	@Override
-	public void hide() {
-
-	}
-
-	@Override
-	public void pause() {
-
-	}
-
-	@Override
-	public void resume() {
-
-	}
-
-	@Override
 	public void dispose() {
 		debugRenderer.dispose();
 		world.dispose();
