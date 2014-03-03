@@ -13,13 +13,13 @@
 			"up": "btn_up_blue",
 			"down": "btn_down_blue",
 			"over": "btn_over_blue",
-			"font": righteous-24 
+			"font": righteous-16 
 		},
 		"red": {
 			"up": "btn_up_red",
 			"down": "btn_down_red",
 			"over": "btn_over_red",
-			"font": righteous-24
+			"font": righteous-16
 		}
 	}
 }

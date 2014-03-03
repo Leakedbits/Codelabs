@@ -12,7 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class SplashScreen implements Screen {
 
-	private Image splashImage;
+	private Image codelabsImage;
+	private Image githubImage;
 	private Stage stage;
 
 	@Override
@@ -35,21 +36,32 @@ public class SplashScreen implements Screen {
 		stage = new Stage();
 
 		/* Load splash image */
-		splashImage = new Image(new Texture(
+		codelabsImage = new Image(new Texture(
 				Gdx.files.internal("data/images/codelabs_splash.png")));
+		
+		githubImage = new Image(new Texture(
+				Gdx.files.internal("data/images/github_splash.png")));
 
 		/* Set the splash image in the center of the screen */
 		float width = Gdx.graphics.getWidth();
 		float height = Gdx.graphics.getHeight();
 
-		splashImage.setPosition((width - splashImage.getWidth()) / 2,
-				(height - splashImage.getHeight()) / 2);
+		codelabsImage.setPosition((width - codelabsImage.getWidth()) / 2,
+				(height - codelabsImage.getHeight()) / 2);
 
 		/* Fade in the image and then swing it down */
-		splashImage.getColor().a = 0f;
-		splashImage.addAction(Actions.sequence(Actions.fadeIn(1.25f), Actions
-				.delay(2, Actions.moveBy(0,
-						-(height - splashImage.getHeight() / 2), 1.25f,
+		codelabsImage.getColor().a = 0f;
+		codelabsImage.addAction(Actions.sequence(Actions.fadeIn(0.5f), Actions
+				.delay(1, Actions.fadeOut(0.5f))));
+		
+		githubImage.setPosition((width - githubImage.getWidth()) / 2,
+				(height - githubImage.getHeight()) / 2);
+
+		/* Fade in the image and then swing it down */
+		githubImage.getColor().a = 0f;
+		githubImage.addAction(Actions.delay(2, Actions.sequence(Actions.fadeIn(0.5f), Actions
+				.delay(1, Actions.moveBy(0,
+						-(height - githubImage.getHeight() / 2), 1,
 						Interpolation.swingIn)), Actions.run(new Runnable() {
 			@Override
 			public void run() {
@@ -58,9 +70,10 @@ public class SplashScreen implements Screen {
 				((Game) Gdx.app.getApplicationListener())
 						.setScreen(new MainMenu());
 			}
-		})));
+		}))));
 
-		stage.addActor(splashImage);
+		stage.addActor(codelabsImage);
+		stage.addActor(githubImage);
 	}
 
 	@Override

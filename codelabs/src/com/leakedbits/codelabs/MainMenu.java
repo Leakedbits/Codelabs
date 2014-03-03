@@ -48,15 +48,13 @@ public class MainMenu implements Screen {
 	public void show() {
 		stage = new Stage();
 
-		final float computedHeight = Codelabs.TARGET_WIDTH
-				* (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth());
-		stage.setViewport(Codelabs.TARGET_WIDTH, computedHeight);
-		stage.addAction(Actions.sequence(Actions.moveBy(0, computedHeight),
-				Actions.delay(0.25f, Actions.moveBy(0, -computedHeight, 1.25f, Interpolation.swingOut))));
-
+		stage.setViewport(Codelabs.TARGET_WIDTH, Codelabs.TARGET_WIDTH
+				* (Gdx.graphics.getHeight() / (float) Gdx.graphics.getWidth()));
+		
 		Gdx.input.setInputProcessor(stage);
 
 		atlas = new TextureAtlas("data/ui/atlas.pack");
+		
 		skin = new Skin(Gdx.files.internal("data/ui/menu_skin.json"), atlas);
 
 		table = new Table(skin);
@@ -90,7 +88,12 @@ public class MainMenu implements Screen {
 				});
 
 		table.add(exitButton).colspan(MAX_TABLE_COLUMNS).fill();
-
+		
+		float displacement = Codelabs.TARGET_WIDTH - table.getWidth() / 2;
+		table.addAction(Actions.sequence(Actions.moveBy(displacement, 0),
+				Actions.delay(1, Actions.moveBy(-displacement, 0, 1,
+						Interpolation.swingOut))));
+		
 		stage.addActor(table);
 
 	}
