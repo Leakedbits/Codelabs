@@ -70,7 +70,6 @@ public class CollisionsSample extends Sample implements ContactListener {
 		world.step(1 / 60f, 6, 2);
 	}
 
-
 	@Override
 	public void show() {
 		/*
@@ -110,7 +109,7 @@ public class CollisionsSample extends Sample implements ContactListener {
 				new Vector2(5, 0));
 
 		/* Create the box */
-		shape = Box2DFactory.createBoxShape(0.5f, 0.5f);
+		shape = Box2DFactory.createBoxShape(0.5f, 0.5f, new Vector2(0, 0), 0);
 		fixtureDef = Box2DFactory.createFixture(shape, 1, 0.5f, 0.5f, false);
 		Box2DFactory.createBody(world, BodyType.StaticBody, fixtureDef,
 				new Vector2(0, 0));
@@ -179,7 +178,7 @@ public class CollisionsSample extends Sample implements ContactListener {
 
 	@Override
 	public void endContact(Contact contact) {
-		
+
 	}
 
 	@Override

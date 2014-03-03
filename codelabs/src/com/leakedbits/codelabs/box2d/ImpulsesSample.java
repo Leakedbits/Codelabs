@@ -15,9 +15,6 @@ import com.leakedbits.codelabs.utils.Sample;
 
 public class ImpulsesSample extends Sample {
 
-	/* Define a body to later apply impulses to it */
-	private Body box;
-
 	/* Use Box2DDebugRenderer, which is a model renderer for debug purposes */
 	private Box2DDebugRenderer debugRenderer;
 
@@ -29,6 +26,9 @@ public class ImpulsesSample extends Sample {
 
 	/* Define a world to hold all bodies and simulate reactions between them */
 	private World world;
+	
+	/* Define a body to later apply impulses to it */
+	private Body box;
 
 	/**
 	 * Main constructor used to update sample name.
@@ -87,13 +87,14 @@ public class ImpulsesSample extends Sample {
 		 */
 		// Gdx.input.setInputProcessor(this);
 
-		
-/* Create the box */
-		Shape shape = Box2DFactory.createBoxShape(1.5f, 1.5f);
+		/* Create the box */
+		Shape shape = Box2DFactory.createBoxShape(1.5f, 1.5f,
+				new Vector2(0, 0), 0);
 		FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 0.3f, 0.5f,
 				0.5f, false);
 		box = Box2DFactory.createBody(world, BodyType.DynamicBody, fixtureDef,
 				new Vector2(0, 0));
+
 		/* Create the walls */
 		Box2DFactory.createWalls(world, camera.viewportWidth,
 				camera.viewportHeight, 1);

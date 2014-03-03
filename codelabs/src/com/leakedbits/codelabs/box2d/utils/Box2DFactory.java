@@ -27,10 +27,10 @@ public class Box2DFactory {
 		return body;
 	}
 
-	public static Shape createBoxShape(float halfWidth, float halfHeight) {
+	public static Shape createBoxShape(float halfWidth, float halfHeight, Vector2 center, float angle) {
 		PolygonShape boxShape = new PolygonShape();
-		boxShape.setAsBox(halfWidth, halfHeight);
-
+		boxShape.setAsBox(halfWidth, halfHeight, center, angle);
+		
 		return boxShape;
 	}
 

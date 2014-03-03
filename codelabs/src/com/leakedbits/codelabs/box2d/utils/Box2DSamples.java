@@ -10,6 +10,7 @@ import com.leakedbits.codelabs.box2d.DragAndDropSample;
 import com.leakedbits.codelabs.box2d.GravityAccelerometerSample;
 import com.leakedbits.codelabs.box2d.ImpulsesSample;
 import com.leakedbits.codelabs.box2d.CollisionsSample;
+import com.leakedbits.codelabs.box2d.JumpingSample;
 import com.leakedbits.codelabs.box2d.SpawnBodiesSample;
 import com.leakedbits.codelabs.box2d.SpritesSample;
 import com.leakedbits.codelabs.utils.Sample;
@@ -26,7 +27,8 @@ public class Box2DSamples {
 					SpritesSample.class,
 					GravityAccelerometerSample.class,
 					CollisionsSample.class,
-					BuoyancySample.class
+					BuoyancySample.class,
+					JumpingSample.class
 			)
 	);
 

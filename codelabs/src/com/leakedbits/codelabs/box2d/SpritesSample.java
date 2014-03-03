@@ -139,7 +139,8 @@ public class SpritesSample extends Sample {
 		// Gdx.input.setInputProcessor(this);
 
 		/* Create the box */
-		Shape shape = Box2DFactory.createBoxShape(1.5f, 1.5f);
+		Shape shape = Box2DFactory.createBoxShape(1.5f, 1.5f,
+				new Vector2(0, 0), 0);
 		FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 0.3f, 0.5f,
 				0.5f, false);
 		box = Box2DFactory.createBody(world, BodyType.DynamicBody, fixtureDef,

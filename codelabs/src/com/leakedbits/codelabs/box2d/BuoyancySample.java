@@ -102,14 +102,17 @@ public class BuoyancySample extends Sample implements ContactListener {
 		/* Create the water */
 		Shape shape = Box2DFactory.createBoxShape(
 				(camera.viewportWidth / 2 - 1),
-				(camera.viewportHeight / 2 - 2) / 2);
+				(camera.viewportHeight / 2 - 2) / 2, new Vector2(0, 0), 0);
 		FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 1, 0.1f, 0,
 				true);
 		Body water = Box2DFactory.createBody(world, BodyType.StaticBody,
 				fixtureDef, new Vector2(0,
 						-(camera.viewportHeight / 2 - 1) / 2 - 0.5f));
 
-		/* Create a buoyancy controller using the previous body as a fluid sensor */
+		/*
+		 * Create a buoyancy controller using the previous body as a fluid
+		 * sensor
+		 */
 		buoyancyController = new BuoyancyController(world, water
 				.getFixtureList().first());
 
@@ -175,7 +178,8 @@ public class BuoyancySample extends Sample implements ContactListener {
 
 			/* Create a new box */
 			if (Math.random() >= 0.5) {
-				Shape shape = Box2DFactory.createBoxShape(1, 1);
+				Shape shape = Box2DFactory.createBoxShape(1, 1, new Vector2(0,
+						0), 0);
 				FixtureDef fixtureDef = Box2DFactory.createFixture(shape, 0.5f,
 						0.5f, 0.5f, false);
 				Box2DFactory.createBody(world, BodyType.DynamicBody,
