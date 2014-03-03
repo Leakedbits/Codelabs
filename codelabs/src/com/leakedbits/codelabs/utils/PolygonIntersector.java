@@ -1,7 +1,6 @@
 package com.leakedbits.codelabs.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.badlogic.gdx.math.Polygon;
