@@ -89,10 +89,10 @@ public class MainMenu implements Screen {
 
 		table.add(exitButton).colspan(MAX_TABLE_COLUMNS).fill();
 		
-		float displacement = Codelabs.TARGET_WIDTH - table.getWidth() / 2;
-		table.addAction(Actions.sequence(Actions.moveBy(displacement, 0),
-				Actions.delay(1, Actions.moveBy(-displacement, 0, 1,
-						Interpolation.swingOut))));
+//		float displacement = Codelabs.TARGET_WIDTH - table.getWidth() / 2;
+//		table.addAction(Actions.sequence(Actions.moveBy(displacement, 0),
+//				Actions.delay(1, Actions.moveBy(-displacement, 0, 1,
+//						Interpolation.swingOut))));
 		
 		stage.addActor(table);
 
