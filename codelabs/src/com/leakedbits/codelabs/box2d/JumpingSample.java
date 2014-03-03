@@ -42,7 +42,7 @@ public class JumpingSample extends Sample implements ContactListener {
 	 * Main constructor used to update sample name.
 	 */
 	public JumpingSample() {
-		name = "Jump && Double jump";
+		name = "Jump and double jump";
 	}
 
 	@Override
