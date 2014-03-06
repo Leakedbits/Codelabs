@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -65,14 +66,16 @@ public class MainMenu implements Screen {
 		for (String name : SampleUtils.getNames(LibGDXSamples.SAMPLES, false)) {
 			final Sample sample = SampleUtils.instantiateSample(
 					LibGDXSamples.SAMPLES, name);
-			textButtons.add(createTextButton(sample.getName(), skin, "blue",
+			TextButton button = createTextButton(sample.getName(), skin, "blue",
 					new ClickListener() {
 						@Override
 						public void clicked(InputEvent event, float x, float y) {
 							((Game) Gdx.app.getApplicationListener())
 									.setScreen(sample);
 						}
-					}));
+					});
+			button.setColor(new Color(0.4f, 1, 0.4f, 1));
+			textButtons.add(button);
 		}
 		
 		for (String name : SampleUtils.getNames(Box2DSamples.SAMPLES, false)) {
