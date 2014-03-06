@@ -67,6 +67,7 @@ public class ParticlesSample extends Sample {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		particle.setPosition(screenX, Gdx.graphics.getHeight() - screenY);
 		particle.reset();
 
 		return true;
