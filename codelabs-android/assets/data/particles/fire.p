@@ -140,4 +140,4 @@ aligned: false
 additive: true
 behind: false
 - Image Path -
-particle.png
+fire_particle.png

@@ -1,5 +1,6 @@
 package com.leakedbits.codelabs.libgdx.actors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -21,6 +22,7 @@ public class ParticleEffectActor extends Actor {
 		effect.setPosition(100, 100);
 		effect.update(delta);
 		effect.start();
+		Gdx.app.log("Actor", "act");
 	}
 
 	public ParticleEffect getEffect() {

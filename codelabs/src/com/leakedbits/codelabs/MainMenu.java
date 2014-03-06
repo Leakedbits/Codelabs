@@ -8,16 +8,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.leakedbits.codelabs.box2d.utils.Box2DSamples;
+import com.leakedbits.codelabs.libgdx.utils.LibGDXSamples;
 import com.leakedbits.codelabs.utils.Sample;
 import com.leakedbits.codelabs.utils.SampleUtils;
 
@@ -63,6 +62,19 @@ public class MainMenu implements Screen {
 
 		List<TextButton> textButtons = new ArrayList<TextButton>();
 
+		for (String name : SampleUtils.getNames(LibGDXSamples.SAMPLES, false)) {
+			final Sample sample = SampleUtils.instantiateSample(
+					LibGDXSamples.SAMPLES, name);
+			textButtons.add(createTextButton(sample.getName(), skin, "blue",
+					new ClickListener() {
+						@Override
+						public void clicked(InputEvent event, float x, float y) {
+							((Game) Gdx.app.getApplicationListener())
+									.setScreen(sample);
+						}
+					}));
+		}
+		
 		for (String name : SampleUtils.getNames(Box2DSamples.SAMPLES, false)) {
 			final Sample sample = SampleUtils.instantiateSample(
 					Box2DSamples.SAMPLES, name);
