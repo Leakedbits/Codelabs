@@ -8,8 +8,10 @@ import com.leakedbits.codelabs.utils.Sample;
 
 public class ParticlesSample extends Sample {
 
+	/* Object in charge of drawing the screen */
 	private SpriteBatch batch;
 
+	/* Particle effect to display our particle file on */
 	private ParticleEffect particle;
 
 	/**
@@ -59,12 +61,18 @@ public class ParticlesSample extends Sample {
 		particle.dispose();
 	}
 
+	/**
+	 * Sets the particle position to the position dragged by the user.
+	 */
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		particle.setPosition(screenX, Gdx.graphics.getHeight() - screenY);
 
 		return true;
 	}
 
+	/**
+	 * Sets the particle position to where the user has touch and resets the animation.
+	 */
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		particle.setPosition(screenX, Gdx.graphics.getHeight() - screenY);
