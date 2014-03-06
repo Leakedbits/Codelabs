@@ -57,12 +57,17 @@ public class ParticlesSample extends Sample {
 		batch.dispose();
 		particle.dispose();
 	}
-
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+	
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		particle.setPosition(screenX, Gdx.graphics.getHeight() - screenY);
-		particle.reset();
 
+		return true;
+	}
+	
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		particle.reset();
+		
 		return true;
 	}
 	
